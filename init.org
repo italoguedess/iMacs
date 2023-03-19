@@ -1,0 +1,77 @@
+#+title: iEmacs
+#+author: Italo Guedes
+
+* Starting the config file
+:properties:
+:header-args: :tangle init.el :comments org
+:end:
+** Let's start by setting/unsetting some basic things
+don't forget to use C-M-x to apply the changes without having to restart emacs
+
+#+begin_src emacs-lisp
+    ;; disabling the default startup screen of Emacs
+    (setq inhibit-startup-message t
+          visible-bell t)
+#+end_src
+
+** Enabling/disabling some modes
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (global-display-line-numbers-mode 1)
+  (hl-line-mode 1)
+  (blink-cursor-mode 1)
+#+end_src
+
+** Loading the theme (nothing too fancy yet)
+#+begin_src emacs-lisp
+  (load-theme 'modus-vivendi t)
+#+end_src
+
+** Setting the default font
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :font "monospace" :height 120)
+#+end_src
+
+** Setting the packaging system
+- adding melpa, org and elpa repositories
+- use-package to keep things tidy
+- and also set use-package automatically install our packages
+
+#+begin_src emacs-lisp
+  ;; Initialize package sources
+  ;; brings into the environment all the packaging management functions
+  (require 'package)
+
+  ;; sets the package reposities which to pull from
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                          ("org" . "https://orgmode.org/elpa/")
+                          ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  ;; initializes the package system and prepares it to be used
+  (package-initialize)
+  ;; if there aren't contents in the package archive
+  ;; (like in the first time this config is run)
+  (unless package-archive-contents
+    ;; refresh them
+    (package-refresh-contents))
+
+  ;; if the 'use-package' package isn't installed
+  (unless (package-installed-p 'use-package)
+    ;; installs it
+    (package-install 'use-package))
+
+  ;; requires 'use-package' to manage configurations and load packages
+  (require 'use-package)
+  ;; ensures that the packages used by 'use-package' are being installed
+  (setq use-package-always-ensure t)
+#+end_src
+
+** Nice completion with Ivy
+#+begin_src emacs-lisp
+  (use-package ivy
+               :config ;; executes code before the package is loaded
+               (setq ivy-wrap t) ;; enables cycling through suggestions
+               (ivy-mode 1)) ;; enables ivy-mode
+#+end_src
