@@ -1,4 +1,4 @@
-#+title: iEmacs
+#+title: iMacs
 #+author: Italo Guedes
 
 * Starting the config file
