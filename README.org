@@ -7,7 +7,6 @@
 :end:
 ** Let's start by setting/unsetting some basic things
 don't forget to use C-M-x to apply the changes without having to restart emacs
-
 #+begin_src emacs-lisp
     ;; disabling the default startup screen of Emacs
     (setq inhibit-startup-message t
@@ -71,7 +70,57 @@ don't forget to use C-M-x to apply the changes without having to restart emacs
 ** Nice completion with Ivy
 #+begin_src emacs-lisp
   (use-package ivy
-               :config ;; executes code before the package is loaded
-               (setq ivy-wrap t) ;; enables cycling through suggestions
-               (ivy-mode 1)) ;; enables ivy-mode
+               :diminish ;; hides ivy from the modes list in the Emacs mode line
+               :config ;; executes code after the package is loaded
+               (setq ivy-wrap t)
+               (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
+               (counsel-mode 1)) ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
+#+end_src
+
+** Even nicer completions (like M-x functions comments and keybindings) with ivy-rich
+#+begin_src emacs-lisp
+  (use-package ivy-rich
+               :diminish ;; hides ivy from the modes list in the Emacs mode line
+               :config ;; executes code after the package is loaded
+               (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+               (ivy-rich-mode 1)) ;; enables ivy-mode
+#+end_src
+
+
+** Even even nicer completions, but now for keybindings with which-key
+#+begin_src emacs-lisp
+(use-package which-key
+  :diminish ;; hides which-key from the modes list in the Emacs mode line
+  :config ;; executes code after the package is loaded
+  (which-key-mode 1)
+  (setq which-key-idle-delay 0.2)) ;; waits a little before showing the suggestions
+#+end_src
+
+** More helpful help commands with the helpful package
+#+begin_src emacs-lisp
+  (use-package helpful
+    :config
+    (setq counsel-describe-function-function #'helpful-callable) ;; adding helpful to the counsel help commands
+    (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
+#+end_src
+
+
+** Mode line bling with doom-modeline
+To correctly display the icons in the modeline you also need to install the fonts, which can be done by typing:
+#+begin_center
+M-x all-the-icons-install-fonts
+#+end_center
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :config
+    (setq doom-modeline-height 15) ;; settings the modeline bar height
+    (doom-modeline-mode 1)) ;; activate doom-modeline
+  (use-package all-the-icons) ;; so that icons can be displayed in doom-modeline
+#+end_src
+
+** Vi keybindings are great
+#+begin_src emacs-lisp
+  (use-package evil
+    :config
+    (evil-mode 1))
 #+end_src
