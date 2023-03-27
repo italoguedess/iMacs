@@ -80,12 +80,12 @@ don't forget to use C-M-x to apply the changes without having to restart emacs
 ** Even nicer completions (like M-x functions comments and keybindings) with ivy-rich
 #+begin_src emacs-lisp
   (use-package ivy-rich
+               :after ivy ;; waits until ivy has been loaded
                :diminish ;; hides ivy from the modes list in the Emacs mode line
                :config ;; executes code after the package is loaded
                (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
                (ivy-rich-mode 1)) ;; enables ivy-mode
 #+end_src
-
 
 ** Even even nicer completions, but now for keybindings with which-key
 #+begin_src emacs-lisp
@@ -104,11 +104,10 @@ don't forget to use C-M-x to apply the changes without having to restart emacs
     (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
 #+end_src
 
-
 ** Mode line bling with doom-modeline
 To correctly display the icons in the modeline you also need to install the fonts, which can be done by typing:
 #+begin_center
-M-x all-the-icons-install-fonts
+M-x all-the-icons-install-usonts
 #+end_center
 #+begin_src emacs-lisp
   (use-package doom-modeline
@@ -118,9 +117,88 @@ M-x all-the-icons-install-fonts
   (use-package all-the-icons) ;; so that icons can be displayed in doom-modeline
 #+end_src
 
-** Vi keybindings are great
+** Vim keybindings are great
+So let's use them and make sure they are readilly available accross Emacs with evil-collection
 #+begin_src emacs-lisp
   (use-package evil
+    :init
+    (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+    (setq evil-want-keybinding nil)
     :config
     (evil-mode 1))
+
+  (use-package evil-collection
+    :after evil ;; waits until evil has been loaded
+    :config
+    (evil-collection-init))
+#+end_src
+
+** Project management with projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :diminish
+    :custom
+    (projectile-completion-system 'ivy)
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :config
+    (projectile-mode 1))
+#+end_src
+
+** Magit is a nice git porcelain
+#+begin_src emacs-lisp
+  (use-package magit)
+#+end_src
+
+** Orgmode!
+- emacs already comes with orgmode, but let's make sure its up to date.
+- keeping the * characters in each heading can become cumbersome, so let's put simpler ones instead
+#+begin_src emacs-lisp
+  (use-package org
+    :custom
+    (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
+    (org-hide-emphasis-markers t)) ;; hides the markup characters when rich text editing
+  (use-package org-bullets
+    :after org ;; waits until org-mode has been loaded
+    :hook (org-mode . org-bullets-mode) ;; activates this mode whenever org is activated
+    :custom
+      (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
+#+end_src
+
+** IDEmacs
+- setting up lsp-mode
+- using lsp-ui-mode for nice popups
+- lsp-ivy for a fancy symbols search
+- company-mode for a sweeter completion
+- yasnippet for the template type completion
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :init
+    (setq lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
+    :hook (
+           (c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
+           (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
+    :commands lsp lsp-deferred)
+
+  (use-package lsp-ui ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
+    :commands lsp-ui-mode)
+
+  (use-package lsp-ivy ;; to search for symbols in a workspace
+    :bind ("C-c l s" . lsp-ivy-workspace-symbol))
+
+  (use-package company ;; complete anything
+    :after lsp-mode ;; waits until lsp-mode has been loaded
+    :hook (lsp-mode . company-mode) ;; auto-stats it after lsp-mode
+    :custom
+    (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
+    (company-idle-delay 0.0)) ;; suggestions without delay
+
+  (use-package flycheck ;; syntax checking with flycheck
+    :init (global-flycheck-mode))
+
+  (use-package yasnippet ;; yet another templates system
+    :config (yas-global-mode 1))
+
+  (use-package yasnippet-snippets ;; populate yasnippet
+    :after yasnippet)
 #+end_src
