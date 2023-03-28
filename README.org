@@ -157,7 +157,15 @@ So let's use them and make sure they are readilly available accross Emacs with e
   (use-package org
     :custom
     (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
-    (org-hide-emphasis-markers t)) ;; hides the markup characters when rich text editing
+    (org-hide-emphasis-markers t) ;; hides the markup characters when rich text editing
+    (org-agenda-files '("~/agenda/")) ;; org-agenda captures all org files in the agenda home folder directory
+    :bind
+    ("C-c a" . org-agenda) ;; fast access to org-agenda
+    :config
+    (setq org-todo-keywords ;; defining more todo keyword sequences
+     '((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)"))))
+
+
   (use-package org-bullets
     :after org ;; waits until org-mode has been loaded
     :hook (org-mode . org-bullets-mode) ;; activates this mode whenever org is activated
