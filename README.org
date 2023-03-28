@@ -67,20 +67,20 @@ don't forget to use C-M-x to apply the changes without having to restart emacs
   (setq use-package-always-ensure t)
 #+end_src
 
-** Nice completion with Ivy
+** Nice completion with Ivy/Counsel
 #+begin_src emacs-lisp
-  (use-package ivy
+  (use-package counsel ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
                :diminish ;; hides ivy from the modes list in the Emacs mode line
                :config ;; executes code after the package is loaded
                (setq ivy-wrap t)
                (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
-               (counsel-mode 1)) ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
+               (counsel-mode 1)) ;; activates counsel and ivy
 #+end_src
 
 ** Even nicer completions (like M-x functions comments and keybindings) with ivy-rich
 #+begin_src emacs-lisp
   (use-package ivy-rich
-               :after ivy ;; waits until ivy has been loaded
+               :after counsel ;; waits until ivy has been loaded
                :diminish ;; hides ivy from the modes list in the Emacs mode line
                :config ;; executes code after the package is loaded
                (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
