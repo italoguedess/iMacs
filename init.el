@@ -162,9 +162,8 @@
 (use-package lsp-mode
   :init
   (setq lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
-  :hook (
-         (c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
-         (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
+  :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
+	 (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
   :commands lsp lsp-deferred)
 
 (use-package lsp-ui ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
@@ -174,8 +173,8 @@
   :bind ("C-c l s" . lsp-ivy-workspace-symbol))
 
 (use-package company ;; complete anything
-  :after lsp-mode ;; waits until lsp-mode has been loaded
-  :hook (lsp-mode . company-mode) ;; auto-stats it after lsp-mode
+  :hook ((lsp-mode . company-mode) ;; auto-stats it after lsp-mode
+	 (org-mode . company-mode)) ;; auto-stats it after org-mode 
   :custom
   (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
   (company-idle-delay 0.0)) ;; suggestions without delay
