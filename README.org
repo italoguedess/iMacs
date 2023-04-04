@@ -1,10 +1,8 @@
 #+title: iMacs
 #+author: Italo Guedes
+#+property: header-args :results none :tangle init.el :comments org
 
 * Starting the config file
-:properties:
-:header-args: :tangle init.el :comments org
-:end:
 ** Let's start by setting/unsetting some basic things
 don't forget to use C-M-x to apply the changes without having to restart emacs
 #+begin_src emacs-lisp
@@ -162,9 +160,13 @@ So let's use them and make sure they are readilly available accross Emacs with e
     :bind
     ("C-c a" . org-agenda) ;; fast access to org-agenda
     :config
+    (org-babel-do-load-languages  ;; defines the languages which are supported by org-babel
+	'org-babel-load-languages
+	'((emacs-lisp . t) ;; enables emacs-lisp
+	  (python . t)     ;; enables python
+	  (shell . t)))    ;; enables shell
     (setq org-todo-keywords ;; defining more todo keyword sequences
      '((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)"))))
-
 
   (use-package org-bullets
     :after org ;; waits until org-mode has been loaded
@@ -172,6 +174,7 @@ So let's use them and make sure they are readilly available accross Emacs with e
     :custom
       (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 #+end_src
+
 
 ** IDEmacs
 - setting up lsp-mode

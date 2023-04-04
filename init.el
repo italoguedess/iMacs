@@ -142,9 +142,13 @@
   :bind
   ("C-c a" . org-agenda) ;; fast access to org-agenda
   :config
+  (org-babel-do-load-languages  ;; defines the languages which are supported by org-babel
+      'org-babel-load-languages
+      '((emacs-lisp . t) ;; enables emacs-lisp
+	(python . t)     ;; enables python
+	(shell . t)))    ;; enables shell
   (setq org-todo-keywords ;; defining more todo keyword sequences
    '((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)"))))
-
 
 (use-package org-bullets
   :after org ;; waits until org-mode has been loaded
