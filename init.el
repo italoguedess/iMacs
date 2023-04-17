@@ -139,16 +139,28 @@
   (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
   (org-hide-emphasis-markers t) ;; hides the markup characters when rich text editing
   (org-agenda-files '("~/agenda/")) ;; org-agenda captures all org files in the agenda home folder directory
+  (org-capture-templates ;; defining some capture templates for fast content insertion to org agenda
+   '(("t" "Task") ;; task category
+     ("tg" "Gtel" entry (file "~/agenda/gtel.org") "* %?\n")
+     ("tp" "Pers" entry (file "~/agenda/pers.org") "* %?\n")
+     ("tu" "UFC" entry (file "~/agenda/ufc.org") "* %?\n")
+     ("ti" "IC" entry (file "~/agenda/ic.org") "* %?\n")
+     ("n" "Note") ;; note category
+     ("ng" "gtel" entry (file+headline "~/agenda/gtel.org" "Notes") "* %?\n%t")
+     ("np" "Pers" entry (file+headline "~/agenda/pers.org" "Notes") "* %?\n%t")
+     ("nu" "UFC" entry (file+headline "~/agenda/ufc.org" "Notes") "* %?\n%t")
+     ("ni" "IC" entry (file+headline "~/agenda/ic.org" "Notes") "* %?\n%t")))
   :bind
   ("C-c a" . org-agenda) ;; fast access to org-agenda
+  ("C-c c" . org-capture) ;; fast access to org-capture
   :config
   (org-babel-do-load-languages  ;; defines the languages which are supported by org-babel
-      'org-babel-load-languages
-      '((emacs-lisp . t) ;; enables emacs-lisp
-	(python . t)     ;; enables python
-	(shell . t)))    ;; enables shell
+   'org-babel-load-languages
+   '((emacs-lisp . t) ;; enables emacs-lisp
+     (python . t)     ;; enables python
+     (shell . t)))    ;; enables shell
   (setq org-todo-keywords ;; defining more todo keyword sequences
-   '((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)"))))
+   '((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)")))) ;; scrum methodology
 
 (use-package org-bullets
   :after org ;; waits until org-mode has been loaded
@@ -191,3 +203,14 @@
 
 (use-package yasnippet-snippets ;; populate yasnippet
   :after yasnippet)
+
+;; Utilities
+;; This function automatizes the process of setting the python environment in a file
+;; locally, by setting the python executable.
+
+(defun set-local-org-babel-python-command (path) ;; path to the enviroment interpreter
+  "Sets the python enviroment, by choosing an interpreter, in a local file"
+  (interactive "M") ;; enables an interactive call to the function (M-x)
+		    ;; and also gets a string and saves it to the path variable
+  (add-file-local-variable ;; sets a local variable in file locally
+   'org-babel-python-command path)) ;; sets python environment to org babel
