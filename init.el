@@ -209,8 +209,10 @@
 ;; locally, by setting the python executable.
 
 (defun set-local-org-babel-python-command (path) ;; path to the enviroment interpreter
-  "Sets the python enviroment, by choosing an interpreter, in a local file"
-  (interactive "M") ;; enables an interactive call to the function (M-x)
-		    ;; and also gets a string and saves it to the path variable
+  "Sets the python enviroment in a local file through the interpreter path."
+  (interactive ;; enables an interactive call to the function (M-x)
+   "sinterpreter path: ") ;; and also gets a string and saves it to the path variable
   (add-file-local-variable ;; sets a local variable in file locally
-   'org-babel-python-command path)) ;; sets python environment to org babel
+   'org-babel-python-command path) ;; sets python environment to org babel
+  (save-buffer) ;; saves the changes
+  (revert-buffer-quick)) ;; updates buffer to load the variable
