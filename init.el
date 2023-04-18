@@ -161,6 +161,13 @@
      (shell . t)))    ;; enables shell
   (setq org-todo-keywords ;; defining more todo keyword sequences
    '((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)")))) ;; scrum methodology
+  (add-to-list 'org-latex-classes
+	       '("sbrt" "\\documentclass[11pt]{sbrt}"
+		("\\section{%s}" . "\\section*{%s}")
+		("\\subsection{%s}" . "\\subsection*{%s}")
+		("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		("\\paragraph{%s}" . "\\paragraph*{%s}")
+		("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 (use-package org-bullets
   :after org ;; waits until org-mode has been loaded
