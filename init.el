@@ -16,6 +16,13 @@
 
 ;; Loading the theme (nothing too fancy yet)
 
+(setq modus-themes-region '(no-extend accented))
+(setq modus-themes-mode-line '(borderless accented padded))
+(setq modus-themes-completions 'moderate)
+(setq modus-themes-bold-constructs t)
+(setq modus-themes-italic-constructs t)
+(setq modus-themes-paren-match '(bold intense)) 
+(setq modus-themes-org-blocks 'tinted-background)
 (load-theme 'modus-vivendi t)
 
 ;; Setting the default font
@@ -154,17 +161,18 @@
   ("C-c a" . org-agenda) ;; fast access to org-agenda
   ("C-c c" . org-capture) ;; fast access to org-capture
   :config
-  (org-babel-do-load-languages  ;; defines the languages which are supported by org-babel
+  (org-babel-do-load-languages  ;; defines the languages which can be ran by org-babel
    'org-babel-load-languages
    '((emacs-lisp . t) ;; enables emacs-lisp
-     (python . t)     ;; enables python
-     (shell . t)))    ;; enables shell
+     (python . t) ;; enables python
+     (shell . t) ;; enables shell
+     (C . t))) ;; enables C, C++ and D
   (setq org-todo-keywords ;; defining more todo keyword sequences
 	'((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)") ;; scrum methodology
 	  (sequence "TO BE SEEN(t)" "|" "SEEN(s)")))) ;; for note taking
 
-(require 'ox-latex)
-  (add-to-list 'org-latex-classes
+(require 'ox-latex) ;; so we can change the org-latex-classes variable
+  (add-to-list 'org-latex-classes ;; adds sbrt class
 	       '("sbrt" "\\documentclass[11pt]{sbrt}"
 		("\\section{%s}" . "\\section*{%s}")
 		("\\subsection{%s}" . "\\subsection*{%s}")
