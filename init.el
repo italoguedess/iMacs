@@ -146,7 +146,7 @@
      ("tu" "UFC" entry (file "~/agenda/ufc.org") "* %?\n")
      ("ti" "IC" entry (file "~/agenda/ic.org") "* %?\n")
      ("n" "Note") ;; note category
-     ("ng" "gtel" entry (file+headline "~/agenda/gtel.org" "Notes") "* %?\n%t")
+     ("ng" "Gtel" entry (file+headline "~/agenda/gtel.org" "Notes") "* %?\n%t")
      ("np" "Pers" entry (file+headline "~/agenda/pers.org" "Notes") "* %?\n%t")
      ("nu" "UFC" entry (file+headline "~/agenda/ufc.org" "Notes") "* %?\n%t")
      ("ni" "IC" entry (file+headline "~/agenda/ic.org" "Notes") "* %?\n%t")))
@@ -160,7 +160,10 @@
      (python . t)     ;; enables python
      (shell . t)))    ;; enables shell
   (setq org-todo-keywords ;; defining more todo keyword sequences
-   '((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)")))) ;; scrum methodology
+	'((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)") ;; scrum methodology
+	  (sequence "TO BE SEEN(t)" "|" "SEEN(s)")))) ;; for note taking
+
+(require 'ox-latex)
   (add-to-list 'org-latex-classes
 	       '("sbrt" "\\documentclass[11pt]{sbrt}"
 		("\\section{%s}" . "\\section*{%s}")
@@ -168,6 +171,7 @@
 		("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		("\\paragraph{%s}" . "\\paragraph*{%s}")
 		("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
 
 (use-package org-bullets
   :after org ;; waits until org-mode has been loaded
