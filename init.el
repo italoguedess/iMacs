@@ -144,7 +144,7 @@
 (use-package org
   :custom
   (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
-  (org-hide-emphasis-markers nil) ;; hides the markup characters when rich text editing
+  (org-hide-emphasis-markers nil) ;; shows the markup characters when rich text editing
   (org-confirm-babel-evaluate nil) ;; disables confirmation when running source blocks
   (org-agenda-files '("~/agenda/")) ;; org-agenda captures all org files in the agenda home folder directory
   (org-capture-templates ;; defining some capture templates for fast content insertion to org agenda
