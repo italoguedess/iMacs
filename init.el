@@ -199,6 +199,8 @@
   :init
   (setq lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
   :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
+	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
+	 (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
 	 (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
   :commands lsp lsp-deferred)
 
