@@ -147,6 +147,7 @@
   (org-hide-emphasis-markers nil) ;; shows the markup characters when rich text editing
   (org-confirm-babel-evaluate nil) ;; disables confirmation when running source blocks
   (org-agenda-files '("~/agenda/")) ;; org-agenda captures all org files in the agenda home folder directory
+  (org-startup-folded 'content) ;; shows only the headings when entering a .org
   (org-capture-templates ;; defining some capture templates for fast content insertion to org agenda
    '(("t" "Task") ;; task category
      ("tg" "Gtel" entry (file "~/agenda/gtel.org") "* %?\n")
