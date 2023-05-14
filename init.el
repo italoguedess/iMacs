@@ -14,20 +14,36 @@
 (hl-line-mode 1)
 (blink-cursor-mode 1)
 
-;; Loading the theme (nothing too fancy yet)
+;; Modus Vivendi more like Everforest
+;; I really like how the Everforest theme looks like.
+;; [[https://github.com/sainnhe/everforest]].
 
-(setq modus-themes-region '(no-extend accented))
-(setq modus-themes-mode-line '(borderless accented padded))
-(setq modus-themes-completions 'moderate)
-(setq modus-themes-bold-constructs t)
-(setq modus-themes-italic-constructs t)
-(setq modus-themes-paren-match '(bold intense)) 
-(setq modus-themes-org-blocks 'tinted-background)
-(load-theme 'modus-vivendi t)
+(use-package modus-themes
+  :custom
+  (modus-vivendi-palette-overrides
+   '((bg-main "#272E33") ;; bg0
+     (bg-dim "#1E2326") ;; bg_dim
+     (fg-main "#D3C6AA") ;; fg
+     (red "#E67E80") ;; red
+     (orange "#E69875") ;; orange
+     (yellow "#DBBC7F") ;; yellow
+     (green "#A7C080") ;; green
+     (blue "#7FBBB3") ;; blue
+     (aqua "#83C092") ;; aqua
+     (pink "#D699B6"))) ;; purple
+  (modus-themes-bold-constructs t) ;; bold keywords
+  (modus-themes-italic-constructs t) ;; italic comments
+  (modus-themes-org-blocks t) ;; spicier org source blocks
+  :config
+  (load-theme 'modus-vivendi t))
+
+;; Ever Vivendi adjustments
+
+
 
 ;; Setting the default font
 
-(set-face-attribute 'default nil :font "monospace" :height 120)
+(set-face-attribute 'default nil :family "JetBrains Mono" :height 120)
 
 ;; Setting the packaging system
 ;; - adding melpa, org and elpa repositories
