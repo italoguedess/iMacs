@@ -28,16 +28,61 @@ I really like how the Everforest theme looks like.
   (use-package modus-themes
     :custom
     (modus-vivendi-palette-overrides
-     '((bg-main "#272E33") ;; bg0
+     '(
+       ;; Main colors
        (bg-dim "#1E2326") ;; bg_dim
+       (bg-main "#272E33") ;; bg0
+       (bg1 "#2E383C") ;; bg1
+       (bg2 "#374145") ;; bg2
+       (bg3 "#414B50") ;; bg3
+       (bg4 "#495156") ;; bg4
+       (bg5 "#4F5B58") ;; bg5
        (fg-main "#D3C6AA") ;; fg
        (red "#E67E80") ;; red
+       (bg-red "#4C3743") ;; bg_red
        (orange "#E69875") ;; orange
+       (bg-orange"#493B40") ;; bg_visual
        (yellow "#DBBC7F") ;; yellow
+       (bg-yellow "#45443C") ;; bg_yellow
        (green "#A7C080") ;; green
+       (bg-green "#3C4841") ;; bg_green
        (blue "#7FBBB3") ;; blue
+       (bg-blue "#384B55") ;; bg_blue
        (aqua "#83C092") ;; aqua
-       (pink "#D699B6"))) ;; purple
+       (pink "#D699B6") ;; purple
+       (gray0 "#7A8478") ;; gray0
+       (gray1 "#859289") ;; gray1
+       (gray2 "#9DA9A0") ;; gray2
+       ;; Semantic colors
+       (cursor green)
+       (keybind orange)
+       (keyword yellow)
+       (string blue)
+       (comment gray0)
+       (type blue)
+       (fnname pink)
+       (variable orange)
+       (preprocessor yellow)
+       (fg-completion green)
+       (bg-mode-line-active bg1)
+       (fg-mode-line-active fg)
+       (bg-mode-line-inactive bg-dim)
+       (fg-mode-line-inactive fg)
+       (modeline-err green)
+       (modeline-warning green)
+       (bg-region aqua)
+       (fg-region bg-main)
+       (fg-link blue)
+       (fg-heading-0 fg)
+       (fg-heading-1 fg)
+       (fg-heading-2 aqua)
+       (fg-heading-3 blue)
+       (fg-heading-4 green)
+       ()
+       ()
+       ()
+       )
+     ) ;; purple
     (modus-themes-bold-constructs t) ;; bold keywords
     (modus-themes-italic-constructs t) ;; italic comments
     (modus-themes-org-blocks t) ;; spicier org source blocks
