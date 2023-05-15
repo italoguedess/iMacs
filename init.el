@@ -47,25 +47,30 @@
      (gray1 "#859289") ;; gray1
      (gray2 "#9DA9A0") ;; gray2
      ;; Semantic colors
-     (cursor green)
-     (keybind orange)
-     (keyword yellow)
-     (string blue)
-     (comment gray0)
-     (type blue)
+     (cursor yellow) ;; cursor
+     ;; Programming
+     (keyword blue)
+     (type green)
      (fnname pink)
-     (variable orange)
-     (preprocessor yellow)
-     (fg-completion green)
+     (variable red)
+     (string aqua)
+     (comment gray0)
+     (constant orange)
+     (preprocessor aqua)
+     ;; parentheses matching
+     (bg-paren-match gray1)
+     ;; modeline
      (bg-mode-line-active bg1)
      (fg-mode-line-active fg)
      (bg-mode-line-inactive bg-dim)
      (fg-mode-line-inactive fg)
-     (modeline-err green)
-     (modeline-warning green)
+     ;; active region
      (bg-region aqua)
      (fg-region bg-main)
+     ;; links
      (fg-link blue)
+     (builtin red)
+     ;; headings
      (fg-heading-0 fg)
      (fg-heading-1 fg)
      (fg-heading-2 aqua)
