@@ -20,7 +20,7 @@
 
 (use-package modus-themes
   :custom
-  (modus-vivendi-palette-overrides
+  (modus-vivendi-palette-overrides ;;changing default modus vivendi palette
    '(
      ;; Main colors
      (bg-dim "#1E2326") ;; bg_dim
@@ -47,16 +47,17 @@
      (gray1 "#859289") ;; gray1
      (gray2 "#9DA9A0") ;; gray2
      ;; Semantic colors
-     (cursor yellow) ;; cursor
-     ;; Programming
-     (keyword blue)
-     (type green)
+     (cursor red) ;; cursor
+     ;; Programming set
+     (keyword red)
+     (type red)
      (fnname pink)
-     (variable red)
-     (string aqua)
+     (variable blue)
+     (string orange)
      (comment gray0)
-     (constant orange)
-     (preprocessor aqua)
+     (constant yellow)
+     (preprocessor green)
+     (builtin red) ;; so python type names are red
      ;; parentheses matching
      (bg-paren-match gray1)
      ;; modeline
@@ -69,16 +70,18 @@
      (fg-region bg-main)
      ;; links
      (fg-link blue)
-     (builtin red)
+     (underline-link blue)
      ;; headings
      (fg-heading-0 fg)
      (fg-heading-1 fg)
      (fg-heading-2 aqua)
      (fg-heading-3 blue)
      (fg-heading-4 green)
-     ()
-     ()
-     ()
+     ;; completions
+     (fg-completion-match-0 blue)
+     (bg-completion bg3)
+     () 
+     () 
      )
    ) ;; purple
   (modus-themes-bold-constructs t) ;; bold keywords
