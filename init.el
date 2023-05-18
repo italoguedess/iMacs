@@ -66,8 +66,8 @@
      (bg-mode-line-inactive bg-dim)
      (fg-mode-line-inactive fg)
      ;; active region
-     (bg-region aqua)
-     (fg-region bg-main)
+     (bg-region bg-main)
+     (fg-region green)
      ;; links
      (fg-link blue)
      (underline-link blue)
@@ -215,15 +215,15 @@
   (org-startup-folded 'content) ;; shows only the headings when entering a .org
   (org-capture-templates ;; defining some capture templates for fast content insertion to org agenda
    '(("t" "Task") ;; task category
-     ("tg" "Gtel" entry (file "~/agenda/gtel.org") "* %?\n")
-     ("tp" "Pers" entry (file "~/agenda/pers.org") "* %?\n")
-     ("tu" "UFC" entry (file "~/agenda/ufc.org") "* %?\n")
-     ("ti" "IC" entry (file "~/agenda/ic.org") "* %?\n")
+     ("tg" "Gtel" entry (file "~/agenda/gtel.org") "* PLAN %?\n")
+     ("tp" "Pers" entry (file "~/agenda/pers.org") "* PLAN %?\n")
+     ("tu" "UFC" entry (file "~/agenda/ufc.org") "* PLAN %?\n")
+     ("ti" "IC" entry (file "~/agenda/ic.org") "* PLAN %?\n")
      ("n" "Note") ;; note category
-     ("ng" "Gtel" entry (file+headline "~/agenda/gtel.org" "Notes") "* %?\n%t")
-     ("np" "Pers" entry (file+headline "~/agenda/pers.org" "Notes") "* %?\n%t")
-     ("nu" "UFC" entry (file+headline "~/agenda/ufc.org" "Notes") "* %?\n%t")
-     ("ni" "IC" entry (file+headline "~/agenda/ic.org" "Notes") "* %?\n%t")))
+     ("ng" "Gtel" entry (file+headline "~/agenda/gtel.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")
+     ("np" "Pers" entry (file+headline "~/agenda/pers.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")
+     ("nu" "UFC" entry (file+headline "~/agenda/ufc.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")
+     ("ni" "IC" entry (file+headline "~/agenda/ic.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")))
   :bind
   ("C-c a" . org-agenda) ;; fast access to org-agenda
   ("C-c c" . org-capture) ;; fast access to org-capture
