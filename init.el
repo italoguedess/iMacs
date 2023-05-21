@@ -49,15 +49,15 @@
      ;; Semantic colors
      (cursor red) ;; cursor
      ;; Programming set
-     (keyword red)
-     (type red)
-     (fnname pink)
+     (keyword pink)
+     (type pink)
+     (builtin pink) ;; so python type names are pink
+     (fnname red)
      (variable blue)
      (string orange)
      (comment gray0)
      (constant yellow)
      (preprocessor green)
-     (builtin red) ;; so python type names are red
      ;; parentheses matching
      (bg-paren-match gray1)
      ;; modeline
