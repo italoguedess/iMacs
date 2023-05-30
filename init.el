@@ -13,10 +13,51 @@
 (global-display-line-numbers-mode 1)
 (hl-line-mode 1)
 (blink-cursor-mode 1)
+(global-auto-revert-mode t) ;; reverts buffer automatically when the associated file in changed on disk
+
+;; Setting the default font
+
+(set-face-attribute 'default nil :family "JetBrains Mono" :height 120)
+
+;; Configuring the packaging system
+;; - adding melpa, org and elpa repositories
+;; - use-package to keep things tidy
+;; - and also set use-package automatically install our packages
+
+
+;; Initialize package sources
+;; brings into the environment all the packaging management functions
+(require 'package)
+
+;; sets the package reposities which to pull from
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                        ("org" . "https://orgmode.org/elpa/")
+                        ("elpa" . "https://elpa.gnu.org/packages/")))
+
+;; initializes the package system and prepares it to be used
+(package-initialize)
+;; if there aren't contents in the package archive
+;; (like in the first time this config is run)
+(unless package-archive-contents
+  ;; refresh them
+  (package-refresh-contents))
+
+;; if the 'use-package' package isn't installed
+(unless (package-installed-p 'use-package)
+  ;; installs it
+  (package-install 'use-package))
+
+;; requires 'use-package' to manage configurations and load packages
+(require 'use-package)
+;; ensures that the packages used by 'use-package' are being installed
+(setq use-package-always-ensure t)
 
 ;; Modus Vivendi more like Everforest
-;; I really like how the Everforest theme looks like.
-;; [[https://github.com/sainnhe/everforest]].
+;; The modus themes are really configurable and I really like how the Everforest theme looks like...
+;; - [[https://github.com/sainnhe/everforest]]
+;; - [[https://protesilaos.com/emacs/modus-themes]]
+
+;; Modus themes are really configurable
 
 (use-package modus-themes
   :custom
@@ -90,77 +131,7 @@
   :config
   (load-theme 'modus-vivendi t)) ;; loading theme without asking for confirmation
 
-;; Setting the default font
-
-(set-face-attribute 'default nil :family "JetBrains Mono" :height 120)
-
-;; Setting the packaging system
-;; - adding melpa, org and elpa repositories
-;; - use-package to keep things tidy
-;; - and also set use-package automatically install our packages
-
-
-;; Initialize package sources
-;; brings into the environment all the packaging management functions
-(require 'package)
-
-;; sets the package reposities which to pull from
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                        ("org" . "https://orgmode.org/elpa/")
-                        ("elpa" . "https://elpa.gnu.org/packages/")))
-
-;; initializes the package system and prepares it to be used
-(package-initialize)
-;; if there aren't contents in the package archive
-;; (like in the first time this config is run)
-(unless package-archive-contents
-  ;; refresh them
-  (package-refresh-contents))
-
-;; if the 'use-package' package isn't installed
-(unless (package-installed-p 'use-package)
-  ;; installs it
-  (package-install 'use-package))
-
-;; requires 'use-package' to manage configurations and load packages
-(require 'use-package)
-;; ensures that the packages used by 'use-package' are being installed
-(setq use-package-always-ensure t)
-
-;; Nice completion with Ivy/Counsel
-
-(use-package counsel ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
-             :diminish ;; hides ivy from the modes list in the Emacs mode line
-             :config ;; executes code after the package is loaded
-             (setq ivy-wrap t)
-             (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
-             (counsel-mode 1)) ;; activates counsel and ivy
-
-;; Even nicer completions (like M-x functions comments and keybindings) with ivy-rich
-
-(use-package ivy-rich
-             :after counsel ;; waits until ivy has been loaded
-             :diminish ;; hides ivy from the modes list in the Emacs mode line
-             :config ;; executes code after the package is loaded
-             (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-             (ivy-rich-mode 1)) ;; enables ivy-mode
-
-;; Even even nicer completions, but now for keybindings with which-key
-
-(use-package which-key
-  :diminish ;; hides which-key from the modes list in the Emacs mode line
-  :config ;; executes code after the package is loaded
-  (which-key-mode 1)
-  (setq which-key-idle-delay 0.2)) ;; waits a little before showing the suggestions
-
-;; More helpful help commands with the helpful package
-
-(use-package helpful
-  :config
-  (setq counsel-describe-function-function #'helpful-callable) ;; adding helpful to the counsel help commands
-  (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
-
-;; Mode line bling with doom-modeline
+;; doom-modeline
 ;; To correctly display the icons in the modeline you also need to install the fonts, which can be done by typing:
 ;; #+begin_center
 ;; M-x all-the-icons-install-usonts
@@ -172,8 +143,52 @@
   (doom-modeline-mode 1)) ;; activate doom-modeline
 (use-package all-the-icons) ;; so that icons can be displayed in doom-modeline
 
-;; Vim keybindings are great
-;; So let's use them and make sure they are readilly available accross Emacs with evil-collection
+;; ivy/counsel
+;; Ivy - a generic completion frontend for Emacs, Swiper - isearch with an overview, and more. Oh, man!
+;; [[https://github.com/abo-abo/swiper]]
+
+(use-package counsel ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
+             :diminish ;; hides ivy from the modes list in the Emacs mode line
+             :config ;; executes code after the package is loaded
+             (setq ivy-wrap t)
+             (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
+             (counsel-mode 1)) ;; activates counsel and ivy
+
+;; ivy-rich
+;; Sweet M-x functions comments and keybindings
+;; [[https://github.com/Yevgnen/ivy-rich]]
+
+(use-package ivy-rich
+             :after counsel ;; waits until ivy has been loaded
+             :diminish ;; hides ivy from the modes list in the Emacs mode line
+             :config ;; executes code after the package is loaded
+             (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+             (ivy-rich-mode 1)) ;; enables ivy-mode
+
+;; which-key
+;; Emacs package that displays available keybindings in popup
+;; [[https://github.com/justbur/emacs-which-key]].
+
+(use-package which-key
+  :diminish ;; hides which-key from the modes list in the Emacs mode line
+  :config ;; executes code after the package is loaded
+  (which-key-mode 1)
+  (setq which-key-idle-delay 0.2)) ;; waits a little before showing the suggestions
+
+;; helpful
+;; A better Emacs *help* buffer
+;; +Does this count as completion? The help buffers are more complete I guess...+
+;; [[https://github.com/Wilfred/helpful]]
+
+(use-package helpful
+  :config
+  (setq counsel-describe-function-function #'helpful-callable) ;; adding helpful to the counsel help commands
+  (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
+
+;; evil-mode
+;; Vim keybindings are great, so let's use them and configure them accross Emacs.
+;; - [[https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el]]
+;; - [[https://github.com/emacs-evil/evil-collection]]
 
 (use-package evil
   :init
@@ -187,7 +202,9 @@
   :config
   (evil-collection-init))
 
-;; Project management with projectile
+;; projectile
+;; Project Interaction Library for Emacs
+;; [[https://github.com/bbatsov/projectile]]
 
 (use-package projectile
   :diminish
@@ -198,15 +215,15 @@
   :config
   (projectile-mode 1))
 
-;; Magit is a nice git porcelain
+;; magit
+;; Magit is a complete text-based user interface to Git
+;; [[https://magit.vc/]]
 
 (use-package magit)
 
-;; Orgmode!
-;; - emacs already comes with orgmode, but let's make sure its up to date.
-;; - keeping the * characters in each heading can become cumbersome, so let's put simpler ones instead
+;; General configuration
 
-(use-package org
+(use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
   :custom
   (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
   (org-hide-emphasis-markers nil) ;; shows the markup characters when rich text editing
@@ -247,6 +264,10 @@
 		("\\paragraph{%s}" . "\\paragraph*{%s}")
 		("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
+;; org-bullets
+;; keeping the * characters in each heading can become cumbersome, so let's use utf-8
+;; characters instead.
+;; [[https://github.com/sabof/org-bullets]]
 
 (use-package org-bullets
   :after org ;; waits until org-mode has been loaded
@@ -254,12 +275,10 @@
   :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 
-;; IDEmacs
-;; - setting up lsp-mode
-;; - using lsp-ui-mode for nice popups
-;; - lsp-ivy for a fancy symbols search
-;; - company-mode for a sweeter completion
-;; - yasnippet for the template type completion
+;; lsp-mode
+;; Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience
+;; by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
+;; [[https://emacs-lsp.github.io/lsp-mode/]]
 
 (use-package lsp-mode
   :init
@@ -276,6 +295,16 @@
 (use-package lsp-ivy ;; to search for symbols in a workspace
   :bind ("C-c l s" . lsp-ivy-workspace-symbol))
 
+;; auctex
+
+(use-package tex
+  :ensure auctex)
+
+;; company
+;; Company is a text completion framework for Emacs. The name stands for "complete anything".
+;; It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
+;; [[https://company-mode.github.io/]]
+
 (use-package company ;; complete anything
   :hook ((lsp-mode . company-mode) ;; auto-stats it after lsp-mode
 	 (org-mode . company-mode)) ;; auto-stats it after org-mode 
@@ -283,8 +312,18 @@
   (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
   (company-idle-delay 0.0)) ;; suggestions without delay
 
+;; flycheck
+;; Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs, intended as
+;; replacement for the older Flymake extension which is part of GNU Emacs.
+;; [[https://www.flycheck.org/en/latest/]]
+
 (use-package flycheck ;; syntax checking with flycheck
   :init (global-flycheck-mode))
+
+;; yasnippet
+;; YASnippet is a template system for Emacs. It allows you to type an abbreviation and
+;; automatically expand it into function templates.
+;; [[https://github.com/joaotavora/yasnippet]]
 
 (use-package yasnippet ;; yet another templates system
   :config (yas-global-mode 1))
@@ -292,7 +331,19 @@
 (use-package yasnippet-snippets ;; populate yasnippet
   :after yasnippet)
 
-;; Utilities
+;; smartparens
+;; Smartparens is a minor mode for dealing with pairs in Emacs and evil smartparens is a
+;; minor mode which makes evil play nice with smartparens.
+;; - [[https://github.com/Fuco1/smartparens]]
+;; - [[https://github.com/expez/evil-smartparens]]
+
+(use-package smartparens 
+  :config (smartparens-global-strict-mode t))
+
+(use-package evil-smartparens
+  :config (evil-smartparens-mode t))
+
+;; Setting python environment locally for org mode source blocks
 ;; This function automatizes the process of setting the python environment in a file
 ;; locally, by setting the python executable.
 

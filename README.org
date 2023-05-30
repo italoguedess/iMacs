@@ -2,13 +2,59 @@
 #+author: Italo Guedes
 #+property: header-args :results silent :tangle init.el :comments org
 
-* Starting the config file
+* Welcome to iMacs ;)
+Emacs is such a great, feature-rich, customizable +operational system+ text editor,
+I think it's definitelly worth a shot, and that's basically what I'm trying to do.
+
+The default configuration though... not so great, there's just so many quality of
+life improvements and features it lacks.
+
+Community distributions like Spacemacs and Doom Emacs are also great, but, at least
+for me who likes to mess with things, they are difficult to grasp since they add
+a layer above Emacs, which is already hard.
+
+So that's why I've decided to devote some time to make my own configuration. That
+way I can finnaly +waste time changing colors+ have fun configuring while also
+tayloring Emacs to my very need, or at least trying to.
+
+* Table of Contents :toc:
+- [[Welcome to iMacs ;)]]
+- [[Initial quality of life changes]]
+  - [[Let's start by setting/unsetting some basic things]]
+  - [[Enabling/disabling some modes]]
+  - [[Setting the default font]]
+- [[Configuring the packaging system]]
+- [[Adding and configuring packages]]
+- [[Bling]]
+  - [[Modus Vivendi more like Everforest]]
+  - [[doom-modeline]]
+- [[Completions]]
+  - [[ivy/counsel]]
+  - [[ivy-rich]]
+  - [[which-key]]
+  - [[helpful]]
+- [[IDEmacs]]
+  - [[evil-mode]]
+  - [[projectile]]
+  - [[magit]]
+  - [[Orgmode]]
+    - [[General configuration]]
+    - [[org-bullets]]
+  - [[lsp-mode]]
+  - [[auctex]]
+  - [[company]]
+  - [[flycheck]]
+  - [[yasnippet]]
+- [[Utilities]]
+  - [[Setting python environment locally for org mode source blocks]]
+
+* Initial quality of life changes
 ** Let's start by setting/unsetting some basic things
 don't forget to use C-M-x to apply the changes without having to restart emacs
 #+begin_src emacs-lisp
-    ;; disabling the default startup screen of Emacs
-    (setq inhibit-startup-message t
-          visible-bell t)
+  ;; disabling the default startup screen of Emacs
+  (setq inhibit-startup-message t
+	visible-bell t)
 #+end_src
 
 ** Enabling/disabling some modes
@@ -19,11 +65,56 @@ don't forget to use C-M-x to apply the changes without having to restart emacs
   (global-display-line-numbers-mode 1)
   (hl-line-mode 1)
   (blink-cursor-mode 1)
+  (global-auto-revert-mode t) ;; reverts buffer automatically when the associated file in changed on disk
 #+end_src
 
-** Modus Vivendi more like Everforest
-I really like how the Everforest theme looks like.
-[[https://github.com/sainnhe/everforest]].
+** Setting the default font
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :family "JetBrains Mono" :height 120)
+#+end_src
+
+* Configuring the packaging system
+- adding melpa, org and elpa repositories
+- use-package to keep things tidy
+- and also set use-package automatically install our packages
+
+#+begin_src emacs-lisp
+  ;; Initialize package sources
+  ;; brings into the environment all the packaging management functions
+  (require 'package)
+
+  ;; sets the package reposities which to pull from
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                          ("org" . "https://orgmode.org/elpa/")
+                          ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  ;; initializes the package system and prepares it to be used
+  (package-initialize)
+  ;; if there aren't contents in the package archive
+  ;; (like in the first time this config is run)
+  (unless package-archive-contents
+    ;; refresh them
+    (package-refresh-contents))
+
+  ;; if the 'use-package' package isn't installed
+  (unless (package-installed-p 'use-package)
+    ;; installs it
+    (package-install 'use-package))
+
+  ;; requires 'use-package' to manage configurations and load packages
+  (require 'use-package)
+  ;; ensures that the packages used by 'use-package' are being installed
+  (setq use-package-always-ensure t)
+#+end_src
+
+* Adding and configuring packages
+** Bling
+*** Modus Vivendi more like Everforest
+The modus themes are really configurable and I really like how the Everforest theme looks like...
+- [[https://github.com/sainnhe/everforest]]
+- [[https://protesilaos.com/emacs/modus-themes]]
+
+Modus themes are really configurable
 #+begin_src emacs-lisp
   (use-package modus-themes
     :custom
@@ -98,83 +189,7 @@ I really like how the Everforest theme looks like.
     (load-theme 'modus-vivendi t)) ;; loading theme without asking for confirmation
 #+end_src
 
-** Setting the default font
-#+begin_src emacs-lisp
-  (set-face-attribute 'default nil :family "JetBrains Mono" :height 120)
-#+end_src
-
-** Setting the packaging system
-- adding melpa, org and elpa repositories
-- use-package to keep things tidy
-- and also set use-package automatically install our packages
-
-#+begin_src emacs-lisp
-  ;; Initialize package sources
-  ;; brings into the environment all the packaging management functions
-  (require 'package)
-
-  ;; sets the package reposities which to pull from
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                          ("org" . "https://orgmode.org/elpa/")
-                          ("elpa" . "https://elpa.gnu.org/packages/")))
-
-  ;; initializes the package system and prepares it to be used
-  (package-initialize)
-  ;; if there aren't contents in the package archive
-  ;; (like in the first time this config is run)
-  (unless package-archive-contents
-    ;; refresh them
-    (package-refresh-contents))
-
-  ;; if the 'use-package' package isn't installed
-  (unless (package-installed-p 'use-package)
-    ;; installs it
-    (package-install 'use-package))
-
-  ;; requires 'use-package' to manage configurations and load packages
-  (require 'use-package)
-  ;; ensures that the packages used by 'use-package' are being installed
-  (setq use-package-always-ensure t)
-#+end_src
-
-** Nice completion with Ivy/Counsel
-#+begin_src emacs-lisp
-  (use-package counsel ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
-               :diminish ;; hides ivy from the modes list in the Emacs mode line
-               :config ;; executes code after the package is loaded
-               (setq ivy-wrap t)
-               (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
-               (counsel-mode 1)) ;; activates counsel and ivy
-#+end_src
-
-** Even nicer completions (like M-x functions comments and keybindings) with ivy-rich
-#+begin_src emacs-lisp
-  (use-package ivy-rich
-               :after counsel ;; waits until ivy has been loaded
-               :diminish ;; hides ivy from the modes list in the Emacs mode line
-               :config ;; executes code after the package is loaded
-               (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-               (ivy-rich-mode 1)) ;; enables ivy-mode
-#+end_src
-
-** Even even nicer completions, but now for keybindings with which-key
-#+begin_src emacs-lisp
-(use-package which-key
-  :diminish ;; hides which-key from the modes list in the Emacs mode line
-  :config ;; executes code after the package is loaded
-  (which-key-mode 1)
-  (setq which-key-idle-delay 0.2)) ;; waits a little before showing the suggestions
-#+end_src
-
-** More helpful help commands with the helpful package
-#+begin_src emacs-lisp
-  (use-package helpful
-    :config
-    (setq counsel-describe-function-function #'helpful-callable) ;; adding helpful to the counsel help commands
-    (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
-#+end_src
-
-** Mode line bling with doom-modeline
+*** doom-modeline
 To correctly display the icons in the modeline you also need to install the fonts, which can be done by typing:
 #+begin_center
 M-x all-the-icons-install-usonts
@@ -187,8 +202,58 @@ M-x all-the-icons-install-usonts
   (use-package all-the-icons) ;; so that icons can be displayed in doom-modeline
 #+end_src
 
-** Vim keybindings are great
-So let's use them and make sure they are readilly available accross Emacs with evil-collection
+** Completions
+*** ivy/counsel
+Ivy - a generic completion frontend for Emacs, Swiper - isearch with an overview, and more. Oh, man!
+[[https://github.com/abo-abo/swiper]]
+#+begin_src emacs-lisp
+  (use-package counsel ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
+               :diminish ;; hides ivy from the modes list in the Emacs mode line
+               :config ;; executes code after the package is loaded
+               (setq ivy-wrap t)
+               (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
+               (counsel-mode 1)) ;; activates counsel and ivy
+#+end_src
+
+*** ivy-rich
+Sweet M-x functions comments and keybindings
+[[https://github.com/Yevgnen/ivy-rich]]
+#+begin_src emacs-lisp
+  (use-package ivy-rich
+               :after counsel ;; waits until ivy has been loaded
+               :diminish ;; hides ivy from the modes list in the Emacs mode line
+               :config ;; executes code after the package is loaded
+               (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+               (ivy-rich-mode 1)) ;; enables ivy-mode
+#+end_src
+
+*** which-key
+Emacs package that displays available keybindings in popup
+[[https://github.com/justbur/emacs-which-key]].
+#+begin_src emacs-lisp
+(use-package which-key
+  :diminish ;; hides which-key from the modes list in the Emacs mode line
+  :config ;; executes code after the package is loaded
+  (which-key-mode 1)
+  (setq which-key-idle-delay 0.2)) ;; waits a little before showing the suggestions
+#+end_src
+
+*** helpful
+A better Emacs *help* buffer
++Does this count as completion? The help buffers are more complete I guess...+
+[[https://github.com/Wilfred/helpful]]
+#+begin_src emacs-lisp
+  (use-package helpful
+    :config
+    (setq counsel-describe-function-function #'helpful-callable) ;; adding helpful to the counsel help commands
+    (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
+#+end_src
+
+** IDEmacs
+*** evil-mode
+Vim keybindings are great, so let's use them and configure them accross Emacs.
+- [[https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el]]
+- [[https://github.com/emacs-evil/evil-collection]]
 #+begin_src emacs-lisp
   (use-package evil
     :init
@@ -203,7 +268,9 @@ So let's use them and make sure they are readilly available accross Emacs with e
     (evil-collection-init))
 #+end_src
 
-** Project management with projectile
+*** projectile
+Project Interaction Library for Emacs
+[[https://github.com/bbatsov/projectile]]
 #+begin_src emacs-lisp
   (use-package projectile
     :diminish
@@ -215,16 +282,21 @@ So let's use them and make sure they are readilly available accross Emacs with e
     (projectile-mode 1))
 #+end_src
 
-** Magit is a nice git porcelain
+*** magit
+Magit is a complete text-based user interface to Git
+[[https://magit.vc/]]
 #+begin_src emacs-lisp
   (use-package magit)
 #+end_src
 
-** Orgmode!
-- emacs already comes with orgmode, but let's make sure its up to date.
-- keeping the * characters in each heading can become cumbersome, so let's put simpler ones instead
+*** Orgmode
+A GNU Emacs major mode for keeping notes, authoring documents, computational notebooks,
+literate programming, maintaining to-do lists, planning projects, and more — in a fast
+and effective plain text system.
+
+**** General configuration
 #+begin_src emacs-lisp
-  (use-package org
+  (use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
     :custom
     (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
     (org-hide-emphasis-markers nil) ;; shows the markup characters when rich text editing
@@ -264,8 +336,13 @@ So let's use them and make sure they are readilly available accross Emacs with e
 		  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		  ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+end_src
 
-
+**** org-bullets
+keeping the * characters in each heading can become cumbersome, so let's use utf-8
+characters instead.
+[[https://github.com/sabof/org-bullets]]
+#+begin_src emacs-lisp
   (use-package org-bullets
     :after org ;; waits until org-mode has been loaded
     :hook (org-mode . org-bullets-mode) ;; activates this mode whenever org is activated
@@ -273,12 +350,10 @@ So let's use them and make sure they are readilly available accross Emacs with e
       (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 #+end_src
 
-** IDEmacs
-- setting up lsp-mode
-- using lsp-ui-mode for nice popups
-- lsp-ivy for a fancy symbols search
-- company-mode for a sweeter completion
-- yasnippet for the template type completion
+*** lsp-mode
+Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience
+by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
+[[https://emacs-lsp.github.io/lsp-mode/]]
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :init
@@ -294,17 +369,41 @@ So let's use them and make sure they are readilly available accross Emacs with e
 
   (use-package lsp-ivy ;; to search for symbols in a workspace
     :bind ("C-c l s" . lsp-ivy-workspace-symbol))
+#+end_src
 
+*** auctex
+#+begin_src emacs-lisp
+  (use-package tex
+    :ensure auctex)
+#+end_src
+
+*** company
+Company is a text completion framework for Emacs. The name stands for "complete anything".
+It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
+[[https://company-mode.github.io/]]
+#+begin_src emacs-lisp
   (use-package company ;; complete anything
     :hook ((lsp-mode . company-mode) ;; auto-stats it after lsp-mode
 	   (org-mode . company-mode)) ;; auto-stats it after org-mode 
     :custom
     (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
     (company-idle-delay 0.0)) ;; suggestions without delay
+#+end_src
 
+*** flycheck
+Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs, intended as
+replacement for the older Flymake extension which is part of GNU Emacs.
+[[https://www.flycheck.org/en/latest/]]
+#+begin_src emacs-lisp
   (use-package flycheck ;; syntax checking with flycheck
     :init (global-flycheck-mode))
+#+end_src
 
+*** yasnippet
+YASnippet is a template system for Emacs. It allows you to type an abbreviation and
+automatically expand it into function templates.
+[[https://github.com/joaotavora/yasnippet]]
+#+begin_src emacs-lisp
   (use-package yasnippet ;; yet another templates system
     :config (yas-global-mode 1))
 
@@ -312,7 +411,21 @@ So let's use them and make sure they are readilly available accross Emacs with e
     :after yasnippet)
 #+end_src
 
-** Utilities
+*** smartparens
+Smartparens is a minor mode for dealing with pairs in Emacs and evil smartparens is a
+minor mode which makes evil play nice with smartparens.
+- [[https://github.com/Fuco1/smartparens]]
+- [[https://github.com/expez/evil-smartparens]]
+#+begin_src emacs-lisp
+  (use-package smartparens 
+    :config (smartparens-global-strict-mode t))
+
+  (use-package evil-smartparens
+    :config (evil-smartparens-mode t))
+#+end_src
+
+* Utilities
+** Setting python environment locally for org mode source blocks
 This function automatizes the process of setting the python environment in a file
 locally, by setting the python executable.
 #+begin_src emacs-lisp
