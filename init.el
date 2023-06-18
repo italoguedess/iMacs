@@ -264,6 +264,16 @@
 		("\\paragraph{%s}" . "\\paragraph*{%s}")
 		("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
+;; org-reveal
+;; Adding reveal.js presentation framework export backend for nice presentations.
+;; - org-reveal documentation https://github.com/yjwen/org-reveal.
+;; - reveal.js documentation https://github.com/hakimel/reveal.js/.
+;; - *To use org-reveal you have to load it:*
+;;   : M-x loadlibrary ox-reveal
+
+(use-package ox-reveal
+  :custom org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local copy
+
 ;; org-bullets
 ;; keeping the * characters in each heading can become cumbersome, so let's use utf-8
 ;; characters instead.

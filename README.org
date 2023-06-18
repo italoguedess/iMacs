@@ -39,6 +39,7 @@ tayloring Emacs to my very need, or at least trying to.
   - [[magit]]
   - [[Orgmode]]
     - [[General configuration]]
+    - [[org-reveal]]
     - [[org-bullets]]
   - [[lsp-mode]]
   - [[auctex]]
@@ -336,6 +337,18 @@ and effective plain text system.
 		  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		  ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+end_src
+
+**** org-reveal
+Adding reveal.js presentation framework export backend for nice presentations.
+- org-reveal documentation https://github.com/yjwen/org-reveal.
+- reveal.js documentation https://github.com/hakimel/reveal.js/.
+- *To use org-reveal you have to load it:*
+  : M-x loadlibrary ox-reveal
+#+begin_src emacs-lisp
+  (use-package ox-reveal
+    :custom org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local copy
+
 #+end_src
 
 **** org-bullets
