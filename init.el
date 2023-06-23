@@ -291,8 +291,9 @@
 ;; [[https://emacs-lsp.github.io/lsp-mode/]]
 
 (use-package lsp-mode
-  :init
-  (setq lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
+  :custom
+  (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
+  (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
   :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
 	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
 	 (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
