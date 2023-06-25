@@ -350,44 +350,45 @@
 
 (use-package smartparens
   :bind (:map smartparens-mode-map
-	       ("C-c s ("  . sp-wrap-round) ;; wrap around sexp with round parentheses
-	       ("C-c s ["  . sp-wrap-square) ;; wrap around sexp with square brackets
-	       ("C-c s {"  . sp-wrap-curly) ;; wrap around sexp with curly braces
-	       ("C-c s \""  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))) ;; wrap around sexp with double quotes
-	       ("C-c s '"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'"))) ;; wrap around sexp with orgmode single quotes
-	       ;; "orgmode"
-	       ("C-c s o *"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "*"))) ;; wrap around sexp with orgmode bold marker
-	       ("C-c s o /"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "/"))) ;; wrap around sexp with orgmode italic marker
-	       ("C-c s o _"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_"))) ;; wrap around sexp with orgmode underline marker
-	       ("C-c s o ="  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "="))) ;; wrap around sexp with orgmode verbatim marker
-	       ("C-c s o ~"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "~"))) ;; wrap around sexp with orgmode code marker
-	       ("C-c s o +"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "+"))) ;; wrap around sexp with orgmode strike-through marker
-	       ("C-c s o ["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "[["))) ;; wrap around sexp with orgmode link marker
-	       ;; latex
-	       ("C-c s l *"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\textbf{"))) ;; wrap around sexp with latex bold marker
-	       ("C-c s l /"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\emph{"))) ;; wrap around sexp with latex italic marker
-	       ("C-c s l _"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\underline{"))) ;; wrap around sexp with latex underline marker
-	       ("C-c s l m ("  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\("))) ;; wrap around sexp with latex underline marker
-	       ("C-c s l m ["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\["))) ;; wrap around sexp with latex underline marker
-	       ("C-c s l m $"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "$"))) ;; wrap around sexp with latex underline marker
-	       ;; barfing
-	       ("C-c s b f"  . sp-forward-barf-sexp) ;; barfs sexp forward
-	       ("C-c s b b"  . sp-backward-barf-sexp) ;; barfs sexp backwards
-	       ;; slurping
-	       ("C-c s s f"  . sp-forward-slurp-sexp) ;; slurps sexp forward
-	       ("C-c s s b"  . sp-backward-slurp-sexp) ;; slurps sexp backwards
-	       ;; unwrapping and rewrapping
-	       ("C-c s u"  . sp-unwrap-sexp) ;; unwraps sexp
-	       ("C-c s r"  . sp-rewrap-sexp)) ;; rewraps sexp 
-
-  :config 
-  ;; orgmode pairs
+	      ("C-c s ("  . sp-wrap-round) ;; wrap around sexp with round parentheses
+	      ("C-c s ["  . sp-wrap-square) ;; wrap around sexp with square brackets
+	      ("C-c s {"  . sp-wrap-curly) ;; wrap around sexp with curly braces
+	      ("C-c s \""  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))) ;; wrap around sexp with double quotes
+	      ("C-c s '"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'"))) ;; wrap around sexp with orgmode single quotes
+	      ;; "orgmode"
+	      ("C-c s o *"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "*"))) ;; wrap around sexp with orgmode bold marker
+	      ("C-c s o /"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "/"))) ;; wrap around sexp with orgmode italic marker
+	      ("C-c s o _"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_"))) ;; wrap around sexp with orgmode underline marker
+	      ("C-c s o ="  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "="))) ;; wrap around sexp with orgmode verbatim marker
+	      ("C-c s o ~"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "~"))) ;; wrap around sexp with orgmode code marker
+	      ("C-c s o +"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "+"))) ;; wrap around sexp with orgmode strike-through marker
+	      ("C-c s o ["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "[["))) ;; wrap around sexp with orgmode link marker
+	      ;; latex
+	      ("C-c s l *"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\textbf{"))) ;; wrap around sexp with latex bold marker
+	      ("C-c s l /"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\emph{"))) ;; wrap around sexp with latex italic marker
+	      ("C-c s l _"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\underline{"))) ;; wrap around sexp with latex underline marker
+	      ("C-c s l m ("  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\("))) ;; wrap around sexp with latex underline marker
+	      ("C-c s l m ["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\\["))) ;; wrap around sexp with latex underline marker
+	      ("C-c s l m $"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "$"))) ;; wrap around sexp with latex underline marker
+	      ;; barfing
+	      ("C-c s b f"  . sp-forward-barf-sexp) ;; barfs sexp forward
+	      ("C-c s b b"  . sp-backward-barf-sexp) ;; barfs sexp backwards
+	      ;; slurping
+	      ("C-c s s f"  . sp-forward-slurp-sexp) ;; slurps sexp forward
+	      ("C-c s s b"  . sp-backward-slurp-sexp) ;; slurps sexp backwards
+	      ;; unwrapping and rewrapping
+	      ("C-c s u"  . sp-unwrap-sexp) ;; unwraps sexp
+	      ("C-c s r"  . sp-rewrap-sexp)) ;; rewraps sexp 
+  :config
+  ;; Removing pair '' insertion when cursor before symbol for elisp programming
+  (sp-local-pair '(org-mode emacs-lisp-mode) "'" "'" :unless '(sp-point-before-symbol-p))
+  ;; orgmode
   (sp-local-pair 'org-mode "*" "*") ;; bold
-  (sp-local-pair 'org-mode "/" "/") ;; italic
-  (sp-local-pair 'org-mode "_" "_") ;; underline
-  (sp-local-pair 'org-mode "=" "=") ;; verbatim
+  (sp-local-pair 'org-mode "/" "/" :actions '(:rem insert)) ;; italic
+  (sp-local-pair 'org-mode "_" "_" :actions '(:rem insert)) ;; underline
+  (sp-local-pair 'org-mode "=" "=" :actions '(:rem insert)) ;; verbatim
   (sp-local-pair 'org-mode "~" "~") ;; code
-  (sp-local-pair 'org-mode "+" "+") ;; strike-through
+  (sp-local-pair 'org-mode "+" "+" :actions '(:rem insert)) ;; strike-through
   (sp-local-pair 'org-mode "[[" "]]") ;; link
   ;; latex pairs
   (sp-local-pair '(org-mode latex-mode) "\\textbf{" "}") ;; bold
