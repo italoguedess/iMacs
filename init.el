@@ -383,7 +383,7 @@
   ;; Removing pair '' insertion when cursor before symbol for elisp programming
   (sp-local-pair '(org-mode emacs-lisp-mode) "'" "'" :unless '(sp-point-before-symbol-p))
   ;; orgmode
-  (sp-local-pair 'org-mode "*" "*") ;; bold
+  (sp-local-pair 'org-mode "*" "*" :actions '(:rem insert)) ;; bold
   (sp-local-pair 'org-mode "/" "/" :actions '(:rem insert)) ;; italic
   (sp-local-pair 'org-mode "_" "_" :actions '(:rem insert)) ;; underline
   (sp-local-pair 'org-mode "=" "=" :actions '(:rem insert)) ;; verbatim
