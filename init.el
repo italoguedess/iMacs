@@ -417,3 +417,13 @@
    'org-babel-python-command path) ;; sets python environment to org babel
   (save-buffer) ;; saves the changes
   (revert-buffer-quick)) ;; updates buffer to load the variable
+
+;; Getting rid of annoying backup files
+
+(setq backup-directory-alist '(("." . "~/.config/backup-files"))
+ backup-by-copying t    ; Don't delink hardlinks
+ version-control t      ; Use version numbers on backups
+ delete-old-versions t  ; Automatically delete excess backups
+ kept-new-versions 20   ; how many of the newest versions to keep
+ kept-old-versions 5    ; and how many of the old
+ )
