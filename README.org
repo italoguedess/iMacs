@@ -342,14 +342,11 @@ and effective plain text system.
 
 **** org-reveal
 Adding reveal.js presentation framework export backend for nice presentations.
-- org-reveal documentation https://github.com/yjwen/org-reveal.
+- org-re-reveal documentation https://github.com/yjwen/org-reveal.
 - reveal.js documentation https://github.com/hakimel/reveal.js/.
-- *To use org-reveal you have to load it:*
-  : M-x loadlibrary ox-reveal
 #+begin_src emacs-lisp
-  (use-package ox-reveal
-    :custom org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local copy
-
+  (use-package org-re-reveal
+    :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
 #+end_src
 
 **** org-bullets

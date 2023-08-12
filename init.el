@@ -1,11 +1,9 @@
-;; Let's start by setting/unsetting some basic things
+
 ;; don't forget to use C-M-x to apply the changes without having to restart emacs
 
 ;; disabling the default startup screen of Emacs
 (setq inhibit-startup-message t
       visible-bell t)
-
-;; Enabling/disabling some modes
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -15,11 +13,9 @@
 (blink-cursor-mode 1)
 (global-auto-revert-mode t) ;; reverts buffer automatically when the associated file in changed on disk
 
-;; Setting the default font
-
 (set-face-attribute 'default nil :family "JetBrains Mono" :height 120)
 
-;; Configuring the packaging system
+
 ;; - adding melpa, org and elpa repositories
 ;; - use-package to keep things tidy
 ;; - and also set use-package automatically install our packages
@@ -52,7 +48,7 @@
 ;; ensures that the packages used by 'use-package' are being installed
 (setq use-package-always-ensure t)
 
-;; Modus Vivendi more like Everforest
+
 ;; The modus themes are really configurable and I really like how the Everforest theme looks like...
 ;; - [[https://github.com/sainnhe/everforest]]
 ;; - [[https://protesilaos.com/emacs/modus-themes]]
@@ -131,7 +127,7 @@
   :config
   (load-theme 'modus-vivendi t)) ;; loading theme without asking for confirmation
 
-;; doom-modeline
+
 ;; To correctly display the icons in the modeline you also need to install the fonts, which can be done by typing:
 ;; #+begin_center
 ;; M-x all-the-icons-install-usonts
@@ -143,7 +139,7 @@
   (doom-modeline-mode 1)) ;; activate doom-modeline
 (use-package all-the-icons) ;; so that icons can be displayed in doom-modeline
 
-;; ivy/counsel
+
 ;; Ivy - a generic completion frontend for Emacs, Swiper - isearch with an overview, and more. Oh, man!
 ;; [[https://github.com/abo-abo/swiper]]
 
@@ -154,7 +150,7 @@
              (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
              (counsel-mode 1)) ;; activates counsel and ivy
 
-;; ivy-rich
+
 ;; Sweet M-x functions comments and keybindings
 ;; [[https://github.com/Yevgnen/ivy-rich]]
 
@@ -165,7 +161,7 @@
              (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
              (ivy-rich-mode 1)) ;; enables ivy-mode
 
-;; which-key
+
 ;; Emacs package that displays available keybindings in popup
 ;; [[https://github.com/justbur/emacs-which-key]].
 
@@ -175,7 +171,7 @@
   (which-key-mode 1)
   (setq which-key-idle-delay 0.2)) ;; waits a little before showing the suggestions
 
-;; helpful
+
 ;; A better Emacs *help* buffer
 ;; +Does this count as completion? The help buffers are more complete I guess...+
 ;; [[https://github.com/Wilfred/helpful]]
@@ -185,7 +181,7 @@
   (setq counsel-describe-function-function #'helpful-callable) ;; adding helpful to the counsel help commands
   (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
 
-;; evil-mode
+
 ;; Vim keybindings are great, so let's use them and configure them accross Emacs.
 ;; - [[https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el]]
 ;; - [[https://github.com/emacs-evil/evil-collection]]
@@ -202,7 +198,7 @@
   :config
   (evil-collection-init))
 
-;; projectile
+
 ;; Project Interaction Library for Emacs
 ;; [[https://github.com/bbatsov/projectile]]
 
@@ -215,13 +211,11 @@
   :config
   (projectile-mode 1))
 
-;; magit
+
 ;; Magit is a complete text-based user interface to Git
 ;; [[https://magit.vc/]]
 
 (use-package magit)
-
-;; General configuration
 
 (use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
   :custom
@@ -264,17 +258,17 @@
 		("\\paragraph{%s}" . "\\paragraph*{%s}")
 		("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-;; org-reveal
+
 ;; Adding reveal.js presentation framework export backend for nice presentations.
 ;; - org-reveal documentation https://github.com/yjwen/org-reveal.
 ;; - reveal.js documentation https://github.com/hakimel/reveal.js/.
 ;; - *To use org-reveal you have to load it:*
 ;;   : M-x loadlibrary ox-reveal
 
-(use-package ox-reveal
-  :custom org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local copy
+(use-package org-re-reveal
+  :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local copy
 
-;; org-bullets
+
 ;; keeping the * characters in each heading can become cumbersome, so let's use utf-8
 ;; characters instead.
 ;; [[https://github.com/sabof/org-bullets]]
@@ -285,7 +279,7 @@
   :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 
-;; lsp-mode
+
 ;; Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience
 ;; by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
 ;; [[https://emacs-lsp.github.io/lsp-mode/]]
@@ -306,12 +300,10 @@
 (use-package lsp-ivy ;; to search for symbols in a workspace
   :bind ("C-c l s" . lsp-ivy-workspace-symbol))
 
-;; auctex
-
 (use-package tex
   :ensure auctex)
 
-;; company
+
 ;; Company is a text completion framework for Emacs. The name stands for "complete anything".
 ;; It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 ;; [[https://company-mode.github.io/]]
@@ -323,7 +315,7 @@
   (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
   (company-idle-delay 0.0)) ;; suggestions without delay
 
-;; flycheck
+
 ;; Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs, intended as
 ;; replacement for the older Flymake extension which is part of GNU Emacs.
 ;; [[https://www.flycheck.org/en/latest/]]
@@ -331,7 +323,7 @@
 (use-package flycheck ;; syntax checking with flycheck
   :init (global-flycheck-mode))
 
-;; yasnippet
+
 ;; YASnippet is a template system for Emacs. It allows you to type an abbreviation and
 ;; automatically expand it into function templates.
 ;; [[https://github.com/joaotavora/yasnippet]]
@@ -342,7 +334,7 @@
 (use-package yasnippet-snippets ;; populate yasnippet
   :after yasnippet)
 
-;; smartparens
+
 ;; Smartparens is a minor mode for dealing with pairs in Emacs and evil smartparens is a
 ;; minor mode which makes evil play nice with smartparens.
 ;; - [[https://github.com/Fuco1/smartparens]]
@@ -405,7 +397,7 @@
   (python-mode . evil-smartparens-mode) ;; auto loads evil-smartparens in python-mode
   (C++-mode . evil-smartparens-mode)) ;; auto loads evil-smartparens in C++-mode
 
-;; Setting python environment locally for org mode source blocks
+
 ;; This function automatizes the process of setting the python environment in a file
 ;; locally, by setting the python executable.
 
@@ -417,8 +409,6 @@
    'org-babel-python-command path) ;; sets python environment to org babel
   (save-buffer) ;; saves the changes
   (revert-buffer-quick)) ;; updates buffer to load the variable
-
-;; Getting rid of annoying backup files
 
 (setq backup-directory-alist '(("." . "~/.config/backup-files"))
  backup-by-copying t    ; Don't delink hardlinks
