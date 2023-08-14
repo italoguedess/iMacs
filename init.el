@@ -260,13 +260,11 @@
 
 
 ;; Adding reveal.js presentation framework export backend for nice presentations.
-;; - org-reveal documentation https://github.com/yjwen/org-reveal.
+;; - org-re-reveal documentation https://github.com/yjwen/org-reveal.
 ;; - reveal.js documentation https://github.com/hakimel/reveal.js/.
-;; - *To use org-reveal you have to load it:*
-;;   : M-x loadlibrary ox-reveal
 
 (use-package org-re-reveal
-  :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local copy
+  :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
 
 
 ;; keeping the * characters in each heading can become cumbersome, so let's use utf-8
@@ -280,28 +278,24 @@
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 
 
-;; Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience
-;; by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
-;; [[https://emacs-lsp.github.io/lsp-mode/]]
+;; Emacs Polyglot is the Emacs LSP client that stays out of your way
+;; [[https://github.com/joaotavora/eglot]]
 
-(use-package lsp-mode
-  :custom
-  (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
-  (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
-  :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
-	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
-	 (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
-	 (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
-  :commands lsp lsp-deferred)
-
-(use-package lsp-ui ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
-  :commands lsp-ui-mode)
-
-(use-package lsp-ivy ;; to search for symbols in a workspace
-  :bind ("C-c l s" . lsp-ivy-workspace-symbol))
-
-(use-package tex
-  :ensure auctex)
+(use-package eglot
+  :hook
+  (python-mode . eglot-ensure)
+  (c++-mode . eglot-ensure)
+  (latex-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(python-mode . ("pylyzer")))
+  :bind
+  ("C-c e r" . 'eglot-rename)                   ;; rename object
+  ("C-c e s t" . 'eglot-find-typeDefinition)    ;; search typedef
+  ("C-c e s i" . 'eglot-find-implementation)    ;; search implementation
+  ("C-c e s d" . 'eglot-find-declaration)       ;; search declaration
+  ("C-c e f b" . 'eglot-format-buffer)          ;; format buffer
+  ("C-c e f r" . 'eglot-format))                ;; format region
 
 
 ;; Company is a text completion framework for Emacs. The name stands for "complete anything".
@@ -309,8 +303,9 @@
 ;; [[https://company-mode.github.io/]]
 
 (use-package company ;; complete anything
-  :hook ((lsp-mode . company-mode) ;; auto-stats it after lsp-mode
-	 (org-mode . company-mode)) ;; auto-stats it after org-mode 
+  :diminish ;; hides company from the modes list in the Emacs mode line
+  :hook
+  (after-init . global-company-mode)
   :custom
   (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
   (company-idle-delay 0.0)) ;; suggestions without delay
@@ -373,29 +368,33 @@
 	      ("C-c s r"  . sp-rewrap-sexp)) ;; rewraps sexp 
   :config
   ;; Removing pair '' insertion when cursor before symbol for elisp programming
-  (sp-local-pair '(org-mode emacs-lisp-mode) "'" "'" :unless '(sp-point-before-symbol-p))
+  (sp-pair "'" nil :actions :rem)
   ;; orgmode
-  (sp-local-pair 'org-mode "*" "*" :actions '(:rem insert)) ;; bold
-  (sp-local-pair 'org-mode "/" "/" :actions '(:rem insert)) ;; italic
-  (sp-local-pair 'org-mode "_" "_" :actions '(:rem insert)) ;; underline
-  (sp-local-pair 'org-mode "=" "=" :actions '(:rem insert)) ;; verbatim
-  (sp-local-pair 'org-mode "~" "~") ;; code
-  (sp-local-pair 'org-mode "+" "+" :actions '(:rem insert)) ;; strike-through
-  (sp-local-pair 'org-mode "[[" "]]") ;; link
+  (sp-local-pair '(org-mode) "*" "*" :actions '(wrap)) ;; bold
+  (sp-local-pair '(org-mode) "/" "/" :actions '(wrap)) ;; italic
+  (sp-local-pair '(org-mode) "_" "_" :actions '(wrap)) ;; underline
+  (sp-local-pair '(org-mode) "=" "=" :actions '(wrap)) ;; verbatim
+  (sp-local-pair '(org-mode) "+" "+" :actions '(wrap)) ;; strike-through
+  (sp-local-pair '(org-mode) "~" "~") ;; code
+  (sp-local-pair '(org-mode) "[[" "]]") ;; link
   ;; latex pairs
   (sp-local-pair '(org-mode latex-mode) "\\textbf{" "}") ;; bold
   (sp-local-pair '(org-mode latex-mode) "\\emph{" "}") ;; italic
   (sp-local-pair '(org-mode latex-mode) "\\underline{" "}") ;; underline
-  (sp-local-pair '(org-mode latex-mode) "$" "$") ;; math delimiter
+  (sp-local-pair '(org-mode latex-mode) "$" "$" :actions '(wrap)) ;; math delimiter
   (sp-local-pair '(org-mode latex-mode) "\\[" "\\]") ;; math delimiter
-  (smartparens-global-strict-mode)) ;; activates the package globally
+  :hook
+  (org-mode . smartparens-mode) ;; auto loads evil-smartparens in orgmode
+  (latex-mode . smartparens-mode) ;; auto loads evil-smartparens in latex-mode
+  (python-mode . smartparens-mode) ;; auto loads evil-smartparens in python-mode
+  (c++-mode . smartparens-mode)) ;; auto loads evil-smartparens in C++-mode
 
 (use-package evil-smartparens
   :hook
   (org-mode . evil-smartparens-mode) ;; auto loads evil-smartparens in orgmode
   (latex-mode . evil-smartparens-mode) ;; auto loads evil-smartparens in latex-mode
   (python-mode . evil-smartparens-mode) ;; auto loads evil-smartparens in python-mode
-  (C++-mode . evil-smartparens-mode)) ;; auto loads evil-smartparens in C++-mode
+  (c++-mode . evil-smartparens-mode)) ;; auto loads evil-smartparens in C++-mode
 
 
 ;; This function automatizes the process of setting the python environment in a file
