@@ -217,6 +217,14 @@
 
 (use-package magit)
 
+(use-package julia-mode)
+(use-package julia-vterm
+  :after julia-mode ;; waits until julia-mode has been loaded
+  :hook (julia-mode-hook . julia-vterm-mode)) ;; activates julia-vterm-mode after julia-mode
+
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
 (use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
   :custom
   (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
@@ -244,6 +252,8 @@
    '((emacs-lisp . t) ;; enables emacs-lisp
      (python . t) ;; enables python
      (shell . t) ;; enables shell
+     (julia-vterm . t) ;; enables julia
+     (matlab . t) ;; enables matlab
      (C . t))) ;; enables C, C++ and D
   (setq org-todo-keywords ;; defining more todo keyword sequences
 	'((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)") ;; scrum methodology
@@ -278,24 +288,25 @@
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 
 
-;; Emacs Polyglot is the Emacs LSP client that stays out of your way
-;; [[https://github.com/joaotavora/eglot]]
+;; Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience
+;; by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
+;; [[https://emacs-lsp.github.io/lsp-mode/]]
 
-(use-package eglot
-  :hook
-  (python-mode . eglot-ensure)
-  (c++-mode . eglot-ensure)
-  (latex-mode . eglot-ensure)
-  :config
-  (add-to-list 'eglot-server-programs
-	       '(python-mode . ("pylyzer")))
-  :bind
-  ("C-c e r" . 'eglot-rename)                   ;; rename object
-  ("C-c e s t" . 'eglot-find-typeDefinition)    ;; search typedef
-  ("C-c e s i" . 'eglot-find-implementation)    ;; search implementation
-  ("C-c e s d" . 'eglot-find-declaration)       ;; search declaration
-  ("C-c e f b" . 'eglot-format-buffer)          ;; format buffer
-  ("C-c e f r" . 'eglot-format))                ;; format region
+(use-package lsp-mode
+  :custom
+  (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
+  (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
+  :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
+	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
+	 (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
+	 (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
+  :commands lsp lsp-deferred)
+
+(use-package lsp-ui ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
+  :commands lsp-ui-mode)
+
+(use-package lsp-ivy ;; to search for symbols in a workspace
+  :bind ("C-c l s" . lsp-ivy-workspace-symbol))
 
 
 ;; Company is a text completion framework for Emacs. The name stands for "complete anything".
@@ -307,6 +318,7 @@
   :hook
   (after-init . global-company-mode)
   :custom
+  (company-backends '(company-capf company-dabbrev-code))
   (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
   (company-idle-delay 0.0)) ;; suggestions without delay
 
