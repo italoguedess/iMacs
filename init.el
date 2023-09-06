@@ -217,11 +217,18 @@
 
 (use-package magit)
 
+;; syntax highlight and more for julia
 (use-package julia-mode)
+;; better terminal for emacs
+(use-package vterm)
+;; running julia interpreter inside emacs through vterm
 (use-package julia-vterm
   :after julia-mode ;; waits until julia-mode has been loaded
   :hook (julia-mode-hook . julia-vterm-mode)) ;; activates julia-vterm-mode after julia-mode
+;; julia-vterm support for orgmode
+(use-package ob-julia-vterm)
 
+;; syntax highlight and more for nix
 (use-package nix-mode
   :mode "\\.nix\\'")
 
