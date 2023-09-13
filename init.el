@@ -181,6 +181,73 @@
   (setq counsel-describe-function-function #'helpful-callable) ;; adding helpful to the counsel help commands
   (setq counsel-describe-variable-function #'helpful-variable)) ;; adding helpful to the counsel help commands
 
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+(use-package cmake-mode)
+
+;; syntax highlight and more for julia
+(use-package julia-mode)
+
+;; better terminal for emacs
+(use-package vterm)
+
+;; running julia interpreter inside emacs through vterm
+(use-package julia-vterm
+  :after julia-mode ;; waits until julia-mode has been loaded
+  :hook (julia-mode-hook . julia-vterm-mode)) ;; activates julia-vterm-mode after julia-mode
+
+;; julia-vterm support for orgmode
+(use-package ob-julia-vterm)
+
+;; syntax highlight and more for nix
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package tex
+:defer t
+:after latex
+:custom
+(TeX-master nil)
+(TeX-auto-save t)
+(TeX-parse-self t)
+
+;; Extra indentation for lines beginning with an item.
+(LaTeX-item-indent 0)
+
+(TeX-view-program-selection
+ '(
+   ((output-dvi has-no-display-manager) "dvi2tty")
+   ((output-dvi style-pstricks) "dvips and gv")
+   (output-dvi "xdvi")
+   (output-pdf "PDF Tools")
+   (output-html "xdg-open")))
+:init
+(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+:hook
+;; Since I never use plain tex, whenever Emacs tries to use plain
+;; tex mode (because I opened a .tex file, for instance) it will
+;; just change to latex mode
+(plain-TeX-mode . LaTeX-mode)
+)
+
+(use-package lsp-mode
+  :custom
+  (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
+  (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
+  :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
+	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
+	 (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
+	 (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
+  :commands lsp lsp-deferred)
+
+;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
+(use-package lsp-ui 
+  :commands lsp-ui-mode)
+
+;; to search for symbols in a workspace
+(use-package lsp-ivy 
+  :bind ("C-c l s" . lsp-ivy-workspace-symbol))
+
 
 ;; Vim keybindings are great, so let's use them and configure them accross Emacs.
 ;; - [[https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el]]
@@ -216,21 +283,6 @@
 ;; [[https://magit.vc/]]
 
 (use-package magit)
-
-;; syntax highlight and more for julia
-(use-package julia-mode)
-;; better terminal for emacs
-(use-package vterm)
-;; running julia interpreter inside emacs through vterm
-(use-package julia-vterm
-  :after julia-mode ;; waits until julia-mode has been loaded
-  :hook (julia-mode-hook . julia-vterm-mode)) ;; activates julia-vterm-mode after julia-mode
-;; julia-vterm support for orgmode
-(use-package ob-julia-vterm)
-
-;; syntax highlight and more for nix
-(use-package nix-mode
-  :mode "\\.nix\\'")
 
 (use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
   :custom
@@ -293,27 +345,6 @@
   :hook (org-mode . org-bullets-mode) ;; activates this mode whenever org is activated
   :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
-
-
-;; Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience
-;; by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
-;; [[https://emacs-lsp.github.io/lsp-mode/]]
-
-(use-package lsp-mode
-  :custom
-  (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
-  (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
-  :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
-	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
-	 (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
-	 (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
-  :commands lsp lsp-deferred)
-
-(use-package lsp-ui ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
-  :commands lsp-ui-mode)
-
-(use-package lsp-ivy ;; to search for symbols in a workspace
-  :bind ("C-c l s" . lsp-ivy-workspace-symbol))
 
 
 ;; Company is a text completion framework for Emacs. The name stands for "complete anything".
