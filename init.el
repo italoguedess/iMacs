@@ -299,15 +299,22 @@
 ;; by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
 ;; [[https://emacs-lsp.github.io/lsp-mode/]]
 
+;; lsp through lsp-mode
 (use-package lsp-mode
   :custom
   (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
   (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
   :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
 	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
-	 (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
+	 (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
+	 (julia-mode . lsp-deferred) ;; activates lsp when julia mode buffer shows up
 	 (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
   :commands lsp lsp-deferred)
+
+;; manually configuring lsp server for julia
+(use-package lsp-julia
+  :config
+  (setq lsp-julia-default-environment "~/.julia/environments/v1.9"))
 
 (use-package lsp-ui ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
   :commands lsp-ui-mode)
@@ -322,10 +329,9 @@
 
 (use-package company ;; complete anything
   :diminish ;; hides company from the modes list in the Emacs mode line
-  :hook
-  (after-init . global-company-mode)
+  :hook ((lsp-mode . company-mode) ;; auto-stats it after lsp-mode
+	 (org-mode . company-mode)) ;; auto-stats it after org-mode
   :custom
-  (company-backends '(company-capf company-dabbrev-code))
   (company-minimum-prefix-length 1) ;; suggestions starts after 1 character is typed
   (company-idle-delay 0.0)) ;; suggestions without delay
 
