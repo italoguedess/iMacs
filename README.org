@@ -259,6 +259,7 @@ A better Emacs *help* buffer
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 #+end_src
+
 ***** Cmake
 #+begin_src emacs-lisp
   (use-package cmake-mode)
@@ -357,10 +358,16 @@ A better Emacs *help* buffer
     :bind ("C-c l s" . lsp-ivy-workspace-symbol))
 #+end_src
 
+***** lsp-julia
+#+begin_src emacs-lisp
+  ;; manually configuring lsp server for julia
+  (use-package lsp-julia
+    :config
+    (setq lsp-julia-default-environment "~/.julia/environments/v1.9"))
+
+#+end_src
+
 *** evil-mode
-Vim keybindings are great, so let's use them and configure them accross Emacs.
-- [[https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el]]
-- [[https://github.com/emacs-evil/evil-collection]]
 #+begin_src emacs-lisp
   (use-package evil
     :init
@@ -376,8 +383,6 @@ Vim keybindings are great, so let's use them and configure them accross Emacs.
 #+end_src
 
 *** projectile
-Project Interaction Library for Emacs
-[[https://github.com/bbatsov/projectile]]
 #+begin_src emacs-lisp
   (use-package projectile
     :diminish
@@ -464,39 +469,7 @@ characters instead.
       (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 #+end_src
 
-*** lsp-mode
-Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience
-by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
-[[https://emacs-lsp.github.io/lsp-mode/]]
-#+begin_src emacs-lisp
-  ;; lsp through lsp-mode
-  (use-package lsp-mode
-    :custom
-    (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
-    (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
-    :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
-	   (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
-	   (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
-	   (julia-mode . lsp-deferred) ;; activates lsp when julia mode buffer shows up
-	   (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
-    :commands lsp lsp-deferred)
-
-  ;; manually configuring lsp server for julia
-  (use-package lsp-julia
-    :config
-    (setq lsp-julia-default-environment "~/.julia/environments/v1.9"))
-
-  (use-package lsp-ui ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
-    :commands lsp-ui-mode)
-
-  (use-package lsp-ivy ;; to search for symbols in a workspace
-    :bind ("C-c l s" . lsp-ivy-workspace-symbol))
-#+end_src
-
 *** company
-Company is a text completion framework for Emacs. The name stands for "complete anything".
-It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
-[[https://company-mode.github.io/]]
 #+begin_src emacs-lisp
   (use-package company ;; complete anything
     :diminish ;; hides company from the modes list in the Emacs mode line
@@ -508,18 +481,12 @@ It uses pluggable back-ends and front-ends to retrieve and display completion ca
 #+end_src
 
 *** flycheck
-Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs, intended as
-replacement for the older Flymake extension which is part of GNU Emacs.
-[[https://www.flycheck.org/en/latest/]]
 #+begin_src emacs-lisp
   (use-package flycheck ;; syntax checking with flycheck
     :init (global-flycheck-mode))
 #+end_src
 
 *** yasnippet
-YASnippet is a template system for Emacs. It allows you to type an abbreviation and
-automatically expand it into function templates.
-[[https://github.com/joaotavora/yasnippet]]
 #+begin_src emacs-lisp
   (use-package yasnippet ;; yet another templates system
     :config (yas-global-mode 1))
