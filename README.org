@@ -253,6 +253,110 @@ A better Emacs *help* buffer
 #+end_src
 
 ** IDEmacs
+*** Languages support
+**** C++
+***** .h files are C++ files
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+#+end_src
+***** Cmake
+#+begin_src emacs-lisp
+  (use-package cmake-mode)
+#+end_src
+
+**** Julia
+***** julia-mode
+#+begin_src emacs-lisp
+  ;; syntax highlight and more for julia
+  (use-package julia-mode)
+#+end_src
+
+***** vterm
+#+begin_src emacs-lisp
+  ;; better terminal for emacs
+  (use-package vterm)
+#+end_src
+
+***** Julia interpreter inside emacs
+#+begin_src emacs-lisp
+  ;; running julia interpreter inside emacs through vterm
+  (use-package julia-vterm
+    :after julia-mode ;; waits until julia-mode has been loaded
+    :hook (julia-mode-hook . julia-vterm-mode)) ;; activates julia-vterm-mode after julia-mode
+#+end_src
+
+***** julia-vterm source blocks in orgmode
+#+begin_src emacs-lisp
+  ;; julia-vterm support for orgmode
+  (use-package ob-julia-vterm)
+#+end_src
+
+**** Nix
+#+begin_src emacs-lisp
+  ;; syntax highlight and more for nix
+  (use-package nix-mode
+    :mode "\\.nix\\'")
+#+end_src
+
+**** Latex
+***** Auctex
+#+begin_src emacs-lisp
+  (use-package auctex
+  :defer t
+  :after latex
+  :custom
+  (TeX-master nil)
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+
+  ;; Extra indentation for lines beginning with an item.
+  (LaTeX-item-indent 0)
+
+  (TeX-view-program-selection
+   '(
+     ((output-dvi has-no-display-manager) "dvi2tty")
+     ((output-dvi style-pstricks) "dvips and gv")
+     (output-dvi "xdvi")
+     (output-pdf "PDF Tools")
+     (output-html "xdg-open")))
+  :init
+  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+  :hook
+  ;; Since I never use plain tex, whenever Emacs tries to use plain
+  ;; tex mode (because I opened a .tex file, for instance) it will
+  ;; just change to latex mode
+  (plain-TeX-mode . LaTeX-mode)
+  )
+#+end_src
+
+**** lsp-mode
+***** General config
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :custom
+    (lsp-keymap-prefix "C-c l") ;; setting a keybing for the lsp menu
+    (lsp-headerline-breadcrumb-segments '(project file symbols)) ;; nicer breadcrumbs
+    :hook ((c++-mode . lsp-deferred) ;; activates lsp when c++ mode buffer shows up
+	   (latex-mode . lsp-deferred) ;; activates lsp when latex mode buffer shows up
+	   (python-mode . lsp-deferred) ;; activates lsp when python mode buffer shows up
+	   (lsp-mode . lsp-enable-which-key-integration)) ;; sweet which-key integration
+    :commands lsp lsp-deferred)
+#+end_src
+
+***** lsp-ui
+#+begin_src emacs-lisp
+  ;; for fancy sideline, popup documentation, VScode-like peek UI, etc.
+  (use-package lsp-ui 
+    :commands lsp-ui-mode)
+#+end_src
+
+***** lsp-ivy
+#+begin_src emacs-lisp
+  ;; to search for symbols in a workspace
+  (use-package lsp-ivy 
+    :bind ("C-c l s" . lsp-ivy-workspace-symbol))
+#+end_src
+
 *** evil-mode
 Vim keybindings are great, so let's use them and configure them accross Emacs.
 - [[https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el]]
@@ -292,29 +396,7 @@ Magit is a complete text-based user interface to Git
   (use-package magit)
 #+end_src
 
-*** Julia and Nix
-#+begin_src emacs-lisp
-  ;; syntax highlight and more for julia
-  (use-package julia-mode)
-  ;; better terminal for emacs
-  (use-package vterm)
-  ;; running julia interpreter inside emacs through vterm
-  (use-package julia-vterm
-    :after julia-mode ;; waits until julia-mode has been loaded
-    :hook (julia-mode-hook . julia-vterm-mode)) ;; activates julia-vterm-mode after julia-mode
-  ;; julia-vterm support for orgmode
-  (use-package ob-julia-vterm)
-
-  ;; syntax highlight and more for nix
-  (use-package nix-mode
-    :mode "\\.nix\\'")
-#+end_src
-
-*** Orgmode
-A GNU Emacs major mode for keeping notes, authoring documents, computational notebooks,
-literate programming, maintaining to-do lists, planning projects, and more — in a fast
-and effective plain text system.
-
+*** Org
 **** General configuration
 #+begin_src emacs-lisp
   (use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
