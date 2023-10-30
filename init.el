@@ -27,8 +27,8 @@
 
 ;; sets the package reposities which to pull from
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                        ("org" . "https://orgmode.org/elpa/")
-                        ("elpa" . "https://elpa.gnu.org/packages/")))
+			 ("org" . "https://orgmode.org/elpa/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
 
 ;; initializes the package system and prepares it to be used
 (package-initialize)
@@ -130,36 +130,36 @@
 
 ;; To correctly display the icons in the modeline you also need to install the fonts, which can be done by typing:
 ;; #+begin_center
-;; M-x all-the-icons-install-usonts
+;; M-x nerd-icons-install-fonts
 ;; #+end_center
 
 (use-package doom-modeline
   :config
   (setq doom-modeline-height 15) ;; settings the modeline bar height
   (doom-modeline-mode 1)) ;; activate doom-modeline
-(use-package all-the-icons) ;; so that icons can be displayed in doom-modeline
+(use-package nerd-icons) ;; so that icons can be displayed in doom-modeline
 
 
 ;; Ivy - a generic completion frontend for Emacs, Swiper - isearch with an overview, and more. Oh, man!
 ;; [[https://github.com/abo-abo/swiper]]
 
 (use-package counsel ;; counsel is packaged with ivy and replaces some of the default commands with ivy enhanced ones
-             :diminish ;; hides ivy from the modes list in the Emacs mode line
-             :config ;; executes code after the package is loaded
-             (setq ivy-wrap t)
-             (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
-             (counsel-mode 1)) ;; activates counsel and ivy
+  :diminish ;; hides ivy from the modes list in the Emacs mode line
+  :config ;; executes code after the package is loaded
+  (setq ivy-wrap t)
+  (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
+  (counsel-mode 1)) ;; activates counsel and ivy
 
 
 ;; Sweet M-x functions comments and keybindings
 ;; [[https://github.com/Yevgnen/ivy-rich]]
 
 (use-package ivy-rich
-             :after counsel ;; waits until ivy has been loaded
-             :diminish ;; hides ivy from the modes list in the Emacs mode line
-             :config ;; executes code after the package is loaded
-             (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-             (ivy-rich-mode 1)) ;; enables ivy-mode
+  :after counsel ;; waits until ivy has been loaded
+  :diminish ;; hides ivy from the modes list in the Emacs mode line
+  :config ;; executes code after the package is loaded
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  (ivy-rich-mode 1)) ;; enables ivy-mode
 
 
 ;; Emacs package that displays available keybindings in popup
@@ -172,7 +172,7 @@
   (setq which-key-idle-delay 0.2)) ;; waits a little before showing the suggestions
 
 
-;; A better Emacs *help* buffer
+;; A better Emacs help* buffer
 ;; +Does this count as completion? The help buffers are more complete I guess...+
 ;; [[https://github.com/Wilfred/helpful]]
 
@@ -204,31 +204,31 @@
   :mode "\\.nix\\'")
 
 (use-package auctex
-:defer t
-:after latex
-:custom
-(TeX-master nil)
-(TeX-auto-save t)
-(TeX-parse-self t)
+  :defer t
+  :after latex
+  :custom
+  (TeX-master nil)
+  (TeX-auto-save t)
+  (TeX-parse-self t)
 
-;; Extra indentation for lines beginning with an item.
-(LaTeX-item-indent 0)
+  ;; Extra indentation for lines beginning with an item.
+  (LaTeX-item-indent 0)
 
-(TeX-view-program-selection
- '(
-   ((output-dvi has-no-display-manager) "dvi2tty")
-   ((output-dvi style-pstricks) "dvips and gv")
-   (output-dvi "xdvi")
-   (output-pdf "PDF Tools")
-   (output-html "xdg-open")))
-:init
-(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-:hook
-;; Since I never use plain tex, whenever Emacs tries to use plain
-;; tex mode (because I opened a .tex file, for instance) it will
-;; just change to latex mode
-(plain-TeX-mode . LaTeX-mode)
-)
+  (TeX-view-program-selection
+   '(
+     ((output-dvi has-no-display-manager) "dvi2tty")
+     ((output-dvi style-pstricks) "dvips and gv")
+     (output-dvi "xdvi")
+     (output-pdf "PDF Tools")
+     (output-html "xdg-open")))
+  :init
+  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+  :hook
+  ;; Since I never use plain tex, whenever Emacs tries to use plain
+  ;; tex mode (because I opened a .tex file, for instance) it will
+  ;; just change to latex mode
+  (plain-TeX-mode . LaTeX-mode)
+  )
 
 (use-package lsp-mode
   :custom
@@ -289,15 +289,15 @@
   (org-startup-folded 'content) ;; shows only the headings when entering a .org
   (org-capture-templates ;; defining some capture templates for fast content insertion to org agenda
    '(("t" "Task") ;; task category
-     ("tg" "Gtel" entry (file "~/agenda/gtel.org") "* PLAN %?\n")
-     ("tp" "Pers" entry (file "~/agenda/pers.org") "* PLAN %?\n")
-     ("tu" "UFC" entry (file "~/agenda/ufc.org") "* PLAN %?\n")
-     ("ti" "IC" entry (file "~/agenda/ic.org") "* PLAN %?\n")
+     ("tg" "Gtel" entry (file "~/agenda/gtel.org") " PLAN %?\n")
+     ("tp" "Pers" entry (file "~/agenda/pers.org") " PLAN %?\n")
+     ("tu" "UFC" entry (file "~/agenda/ufc.org") " PLAN %?\n")
+     ("ti" "IC" entry (file "~/agenda/ic.org") " PLAN %?\n")
      ("n" "Note") ;; note category
-     ("ng" "Gtel" entry (file+headline "~/agenda/gtel.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")
-     ("np" "Pers" entry (file+headline "~/agenda/pers.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")
-     ("nu" "UFC" entry (file+headline "~/agenda/ufc.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")
-     ("ni" "IC" entry (file+headline "~/agenda/ic.org" "Notes") "* TO BE SEEN %?\n[[%F]] %t")))
+     ("ng" "Gtel" entry (file+headline "~/agenda/gtel.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")
+     ("np" "Pers" entry (file+headline "~/agenda/pers.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")
+     ("nu" "UFC" entry (file+headline "~/agenda/ufc.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")
+     ("ni" "IC" entry (file+headline "~/agenda/ic.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")))
   :bind
   ("C-c a" . org-agenda) ;; fast access to org-agenda
   ("C-c c" . org-capture) ;; fast access to org-capture
@@ -309,19 +309,19 @@
      (shell . t) ;; enables shell
      (julia-vterm . t) ;; enables julia
      (matlab . t) ;; enables matlab
+     (dot . t) ;; enables matlab
      (C . t))) ;; enables C, C++ and D
   (setq org-todo-keywords ;; defining more todo keyword sequences
-	'((sequence "BACKLOG(b)" "PLAN(p)" "WORK(w!)" "REVIEW(r)" "HOLD(h@)" "|" "DONE(d!)" "CANCELED(c@)") ;; scrum methodology
-	  (sequence "TO BE SEEN(t)" "|" "SEEN(s)")))) ;; for note taking
+	'((sequence "TODO(t)" "REVIEW(r)" "HOLD(h)" "|" "DONE(d)"))))
 
 (require 'ox-latex) ;; so we can change the org-latex-classes variable
   (add-to-list 'org-latex-classes ;; adds sbrt class
 	       '("sbrt" "\\documentclass[11pt]{sbrt}"
-		("\\section{%s}" . "\\section*{%s}")
-		("\\subsection{%s}" . "\\subsection*{%s}")
-		("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-		("\\paragraph{%s}" . "\\paragraph*{%s}")
-		("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+		("\\section{%s}" . "\\section{%s}")
+		("\\subsection{%s}" . "\\subsection{%s}")
+		("\\subsubsection{%s}" . "\\subsubsection{%s}")
+		("\\paragraph{%s}" . "\\paragraph{%s}")
+		("\\subparagraph{%s}" . "\\subparagraph{%s}")))
 
 
 ;; Adding reveal.js presentation framework export backend for nice presentations.
@@ -332,7 +332,7 @@
   :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
 
 
-;; keeping the * characters in each heading can become cumbersome, so let's use utf-8
+;; keeping the  characters in each heading can become cumbersome, so let's use utf-8
 ;; characters instead.
 ;; [[https://github.com/sabof/org-bullets]]
 
