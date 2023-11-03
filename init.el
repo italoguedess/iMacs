@@ -139,6 +139,24 @@
   (doom-modeline-mode 1)) ;; activate doom-modeline
 (use-package nerd-icons) ;; so that icons can be displayed in doom-modeline
 
+(use-package ligature
+  :config
+  ;; Enable all JetBrains Mono ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->" "///" "/=" "/=="
+				      "/>" "//" "/*" "*>" "***" "*/" "<-" "<<-" "<=>" "<=" "<|" "<||"
+				      "<|||" "<|>" "<:" "<>" "<-<" "<<<" "<==" "<<=" "<=<" "<==>" "<-|"
+				      "<<" "<~>" "<=|" "<~~" "<~" "<$>" "<$" "<+>" "<+" "</>" "</" "<*"
+				      "<*>" "<->" "<!--" ":>" ":<" ":::" "::" ":?" ":?>" ":=" "::=" "=>>"
+				      "==>" "=/=" "=!=" "=>" "===" "=:=" "==" "!==" "!!" "!=" ">]" ">:"
+				      ">>-" ">>=" ">=>" ">>>" ">-" ">=" "&&&" "&&" "|||>" "||>" "|>" "|]"
+				      "|}" "|=>" "|->" "|=" "||-" "|-" "||=" "||" ".." ".?" ".=" ".-" "..<"
+				      "..." "+++" "+>" "++" "[||]" "[<" "[|" "{|" "??" "?." "?=" "?:" "##"
+				      "###" "####" "#[" "#{" "#=" "#!" "#:" "#_(" "#_" "#?" "#(" ";;" "_|_"
+				      "__" "~~" "~~>" "~>" "~-" "~@" "$>" "^=" "]#"))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
+
 
 ;; Ivy - a generic completion frontend for Emacs, Swiper - isearch with an overview, and more. Oh, man!
 ;; [[https://github.com/abo-abo/swiper]]
@@ -280,68 +298,6 @@
 
 (use-package magit)
 
-(use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
-  :custom
-  (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
-  (org-hide-emphasis-markers nil) ;; shows the markup characters when rich text editing
-  (org-confirm-babel-evaluate nil) ;; disables confirmation when running source blocks
-  (org-agenda-files '("~/agenda/")) ;; org-agenda captures all org files in the agenda home folder directory
-  (org-startup-folded 'content) ;; shows only the headings when entering a .org
-  (org-capture-templates ;; defining some capture templates for fast content insertion to org agenda
-   '(("t" "Task") ;; task category
-     ("tg" "Gtel" entry (file "~/agenda/gtel.org") " PLAN %?\n")
-     ("tp" "Pers" entry (file "~/agenda/pers.org") " PLAN %?\n")
-     ("tu" "UFC" entry (file "~/agenda/ufc.org") " PLAN %?\n")
-     ("ti" "IC" entry (file "~/agenda/ic.org") " PLAN %?\n")
-     ("n" "Note") ;; note category
-     ("ng" "Gtel" entry (file+headline "~/agenda/gtel.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")
-     ("np" "Pers" entry (file+headline "~/agenda/pers.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")
-     ("nu" "UFC" entry (file+headline "~/agenda/ufc.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")
-     ("ni" "IC" entry (file+headline "~/agenda/ic.org" "Notes") " TO BE SEEN %?\n[[%F]] %t")))
-  :bind
-  ("C-c a" . org-agenda) ;; fast access to org-agenda
-  ("C-c c" . org-capture) ;; fast access to org-capture
-  :config
-  (org-babel-do-load-languages  ;; defines the languages which can be ran by org-babel
-   'org-babel-load-languages
-   '((emacs-lisp . t) ;; enables emacs-lisp
-     (python . t) ;; enables python
-     (shell . t) ;; enables shell
-     (julia-vterm . t) ;; enables julia
-     (matlab . t) ;; enables matlab
-     (dot . t) ;; enables matlab
-     (C . t))) ;; enables C, C++ and D
-  (setq org-todo-keywords ;; defining more todo keyword sequences
-	'((sequence "TODO(t)" "REVIEW(r)" "HOLD(h)" "|" "DONE(d)"))))
-
-(require 'ox-latex) ;; so we can change the org-latex-classes variable
-  (add-to-list 'org-latex-classes ;; adds sbrt class
-	       '("sbrt" "\\documentclass[11pt]{sbrt}"
-		("\\section{%s}" . "\\section{%s}")
-		("\\subsection{%s}" . "\\subsection{%s}")
-		("\\subsubsection{%s}" . "\\subsubsection{%s}")
-		("\\paragraph{%s}" . "\\paragraph{%s}")
-		("\\subparagraph{%s}" . "\\subparagraph{%s}")))
-
-
-;; Adding reveal.js presentation framework export backend for nice presentations.
-;; - org-re-reveal documentation https://github.com/yjwen/org-reveal.
-;; - reveal.js documentation https://github.com/hakimel/reveal.js/.
-
-(use-package org-re-reveal
-  :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
-
-
-;; keeping the  characters in each heading can become cumbersome, so let's use utf-8
-;; characters instead.
-;; [[https://github.com/sabof/org-bullets]]
-
-(use-package org-bullets
-  :after org ;; waits until org-mode has been loaded
-  :hook (org-mode . org-bullets-mode) ;; activates this mode whenever org is activated
-  :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
-
 (use-package company ;; complete anything
   :diminish ;; hides company from the modes list in the Emacs mode line
   :hook ((lsp-mode . company-mode) ;; auto-stats it after lsp-mode
@@ -354,6 +310,10 @@
   :init (global-flycheck-mode))
 
 (use-package yasnippet ;; yet another templates system
+  :bind
+  ("C-c y i" . yas-insert-snippet)
+  ("C-c y n" . yas-new-snippet)
+  ("C-c y v" . yas-visit-snippet-file)
   :config (yas-global-mode 1))
 
 (use-package yasnippet-snippets ;; populate yasnippet
@@ -425,6 +385,112 @@
   (latex-mode . evil-smartparens-mode) ;; auto loads evil-smartparens in latex-mode
   (python-mode . evil-smartparens-mode) ;; auto loads evil-smartparens in python-mode
   (c++-mode . evil-smartparens-mode)) ;; auto loads evil-smartparens in C++-mode
+
+(use-package org ;; emacs already comes with orgmode, but let's make sure its up to date.
+  :custom
+  (org-ellipsis " ▾") ;; uses this character instead of ... when hiding information under a heading
+  (org-hide-emphasis-markers nil) ;; shows the markup characters when rich text editing
+  (org-confirm-babel-evaluate nil) ;; disables confirmation when running source blocks
+  (org-agenda-files '("~/agenda/")) ;; org-agenda captures all org files in the agenda home folder directory
+  (org-startup-folded t) ;; shows only the h1s when entering a .org
+  (org-startup-with-inline-images t) ;; always show inline images
+  (org-image-actual-width 400) ;; limits the shown image width using imagemagick
+  :bind
+  ("C-c a" . org-agenda) ;; fast access to org-agenda
+  ("C-c c" . org-capture) ;; fast access to org-capture
+  :config
+  (org-babel-do-load-languages  ;; defines the languages which can be ran by org-babel
+   'org-babel-load-languages
+   '((emacs-lisp . t) ;; enables emacs-lisp
+     (python . t) ;; enables python
+     (shell . t) ;; enables shell
+     (julia-vterm . t) ;; enables julia
+     (matlab . t) ;; enables matlab
+     (dot . t) ;; enables graphviz
+     (C . t))) ;; enables C, C++ and D
+  (setq org-todo-keywords ;; defining more todo keyword sequences
+	'((sequence "TODO(t)" "REVIEW(r)" "HOLD(h)" "|" "DONE(d)"))))
+
+(require 'ox-latex) ;; so we can change the org-latex-classes variable
+  (add-to-list 'org-latex-classes ;; adds sbrt class
+	       '("sbrt" "\\documentclass[11pt]{sbrt}"
+		("\\section{%s}" . "\\section{%s}")
+		("\\subsection{%s}" . "\\subsection{%s}")
+		("\\subsubsection{%s}" . "\\subsubsection{%s}")
+		("\\paragraph{%s}" . "\\paragraph{%s}")
+		("\\subparagraph{%s}" . "\\subparagraph{%s}")))
+
+(use-package org-roam
+  :custom ;; configuring the org-roam variables
+  (org-roam-directory "~/agenda/")
+  (org-roam-capture-templates
+   '(("d" "Default" plain
+      "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+category: %^{Category}")
+      :unnarrowed t
+      :jump-to-captured nil)
+     ("t" "Task" plain
+      "* TODO %?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: Task\n#+category: %^{Category}")
+      :unnarrowed t
+      :jump-to-captured nil)))
+  :bind ;; sweet bindings
+  ("C-c n b" . org-roam-buffer-toggle) ;; the org-roam buffer contain the back links to the current node
+  ("C-c n f" . org-roam-node-find)
+  ("C-c n i" . org-roam-node-insert)
+  ("C-c n I" . my/org-roam-node-insert-immediate)
+  ("C-c n g" . org-roam-graph)
+  ("C-c n s" . org-roam-db-sync)
+  ("C-c n a a" . org-roam-alias-add)
+  ("C-c n a r" . org-roam-alias-remove)
+  ("C-c n t a" . org-roam-tag-add)
+  ("C-c n t r" . org-roam-tag-remove)
+  ("C-c n r a" . org-roam-ref-add)
+  ("C-c n r r" . org-roam-ref-remove)
+  :config (org-roam-setup))
+
+;; The buffer you put this code in must have lexical-binding set to t!
+;; See the final configuration at the end for more details.
+
+;; gets all nodes with tag
+(defun my/org-roam-filter-by-tag (tag-name)
+  (org-roam-db-sync)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+;; lists all nodes with tag
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+	  (seq-filter
+	   (my/org-roam-filter-by-tag tag-name)
+	   (org-roam-node-list))))
+
+;; updates the agenda files with nodes with tag
+(defun my/org-roam-refresh-agenda-files ()
+  (interactive)
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Task")))
+
+;; Build the agenda list the first time for the session
+(my/org-roam-refresh-agenda-files)
+;; updates the agenda files whenever finishing a node capture
+(add-hook 'org-capture-after-finalize-hook 'my/org-roam-refresh-agenda-files)
+
+;; Bind this to C-c n I
+(defun my/org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (cons arg args))
+	(org-roam-capture-templates (list (append (car org-roam-capture-templates)
+						  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
+
+(use-package org-re-reveal
+  :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
+
+(use-package org-bullets
+  :after org ;; waits until org-mode has been loaded
+  :hook (org-mode . org-bullets-mode) ;; activates this mode whenever org is activated
+  :custom
+    (org-bullets-bullet-list '("●" "○" "●" "○" "●" "○" "●"))) ;; setting the heading marks
 
 
 ;; This function automatizes the process of setting the python environment in a file
