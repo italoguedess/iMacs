@@ -592,6 +592,12 @@ minor mode which makes evil play nice with smartparens.
       (apply #'org-roam-node-insert args)))
 #+end_src
 
+*** org-roam-ui
+#+begin_src emacs-lisp
+  (use-package org-roam-ui ;; better org-roam noded visualization
+    :bind
+    ("C-c n u o" . org-roam-ui-open))
+#+end_src
 ** org-reveal
 #+begin_src emacs-lisp
   (use-package org-re-reveal

@@ -483,6 +483,10 @@
 						  '(:immediate-finish t)))))
     (apply #'org-roam-node-insert args)))
 
+(use-package org-roam-ui ;; better org-roam noded visualization
+  :bind
+  ("C-c n u o" . org-roam-ui-open))
+
 (use-package org-re-reveal
   :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
 
