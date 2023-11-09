@@ -371,7 +371,7 @@
   (sp-local-pair '(org-mode latex-mode) "\\textbf{" "}") ;; bold
   (sp-local-pair '(org-mode latex-mode) "\\emph{" "}") ;; italic
   (sp-local-pair '(org-mode latex-mode) "\\underline{" "}") ;; underline
-  (sp-local-pair '(org-mode latex-mode) "$" "$" :actions '(wrap)) ;; math delimiter
+  (sp-local-pair '(org-mode latex-mode) "$" "$") ;; math delimiter
   (sp-local-pair '(org-mode latex-mode) "\\[" "\\]") ;; math delimiter
   :hook
   (org-mode . smartparens-mode) ;; auto loads evil-smartparens in orgmode
