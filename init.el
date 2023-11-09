@@ -426,12 +426,12 @@
   (org-roam-capture-templates
    '(("d" "Default" plain
       "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+category: %^{Category}")
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+category: ${title}")
       :unnarrowed t
       :jump-to-captured nil)
      ("t" "Task" plain
       "* TODO %?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: Task\n#+category: %^{Category}")
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: :Task:\n#+category: ${title}")
       :unnarrowed t
       :jump-to-captured nil)))
   :bind ;; sweet bindings
