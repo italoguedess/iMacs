@@ -598,10 +598,12 @@ minor mode which makes evil play nice with smartparens.
     :bind
     ("C-c n u o" . org-roam-ui-open))
 #+end_src
-** org-reveal
+** org-re-reveal
 #+begin_src emacs-lisp
   (use-package org-re-reveal
-    :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
+    :custom
+    (org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
+    (org-re-reveal-revealjs-version "4")) ;; setting the revealjs version
 #+end_src
 
 ** org-bullets

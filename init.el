@@ -488,7 +488,9 @@
   ("C-c n u o" . org-roam-ui-open))
 
 (use-package org-re-reveal
-  :custom org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
+  :custom
+  (org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;; get reveal.js from a cdn instead of a local installation
+  (org-re-reveal-revealjs-version "4")) ;; setting the revealjs version
 
 (use-package org-bullets
   :after org ;; waits until org-mode has been loaded
